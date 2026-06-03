@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Virtual environment
+.venv/
+
+# Build-environment runtime state
+.claude/state/
+BLOCKED.md
+
+# Ren'Py generated artifacts
+*.rpyc
+*.rpyb
+*.rpymc
+game/saves/
+game/cache/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
