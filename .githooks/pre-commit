@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Authoritative commit gate (§2, §6). Fires on ANY commit — agent, human, or CI —
+# and cannot be reasoned out of failing. Bypassable only with --no-verify, which
+# the Claude Code PreToolUse hook blocks for the agent.
+#
+# Install once:  git config core.hooksPath .githooks   (or run scripts/setup_hooks.*)
+set -e
+echo "[pre-commit] running Definition-of-Done battery..."
+python scripts/run_dod.py
+echo "[pre-commit] OK"
