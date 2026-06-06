@@ -5,16 +5,16 @@
 > This is the MVP scope only. The world bible and later releases (V1+) are tracked separately. Nothing here is final; it's the living contract for the first autonomous release.
 
 > **── HANDOFF / CURRENT STATE ──**
-> **Settled:** vision & staging (§1), autonomy model (§2), tech stack — Ren'Py + pure-Python systems (§3), layer contract (§4), MVP scope incl. character builder, beach opening, chapter arc, town-gate curtain (§5.1–5.5), systems exercised (§5.6), art approach — manual authoring in FLUX/SD, locked set (§5.7), narrative spine — merfolk red herring (§5.8), system kernel — d20+attr+skill vs DC, no combat (§5.9), advantage/disadvantage model (§5.10), IP guardrail (§5.11), creation mappings — species/skills/traits/origins (§5.12). build environment & guardrails (§9) — four subagents, the hook set, the human-owned DoD gate, environment-vs-build boundary.
-> **Next up:** pin 7.1 (what physically sank the ship) — the one content blocker — then the build itself, in Claude Code.
-> **Still open:** 7.1 what physically sank the ship (user chewing) · 7.4 camp name · 7.5 minor math/overlap · 7.6 FLUX-vs-SD (art session) · 7.7 skill/stat reconciliation (after story written) · 7.9 nat-20/nat-1 rule. 7.13 build-env firm-ups.
+> **Settled:** vision & staging (§1), autonomy model (§2), tech stack — Ren'Py + pure-Python systems (§3), layer contract (§4), MVP scope incl. character builder, beach opening, chapter arc, town-gate curtain (§5.1–5.5), systems exercised (§5.6), art approach — manual authoring in FLUX/SD, locked set (§5.7), narrative spine — merfolk red herring (§5.8), system kernel — d20+attr+skill vs DC, no combat (§5.9), advantage/disadvantage model (§5.10), IP guardrail (§5.11), creation mappings — species/skills/traits/origins (§5.12). build environment & guardrails (§9) — four subagents, the hook set, the human-owned DoD gate, environment-vs-build boundary. **MVP-scoped lore bible drafted** (§9.9).
+> **Next up:** the **art/style lock** (§7.6 — FLUX vs SD, the locked set, the style bible), then the build itself, in Claude Code. (7.1 resolved; lore bible drafted.)
+> **Still open:** 7.5 minor math/overlap · 7.6 FLUX-vs-SD (art session) · 7.7 skill/stat reconciliation (after story written) · 7.9 nat-20/nat-1 rule · 7.13 build-env firm-ups.
 > **Dedicated future sessions:** art/style lock (FLUX vs SD + prompts + style bible); the build itself (in Claude Code, not here).
 
 ---
 
 ## 1. Vision & Staging
 
-✅ A narrative-heavy RPG set on the southern continent of **Evorath**, ~1650 MT. Sword-and-sorcery tone: vibrant, adventurous, magic and mythical creatures.
+✅ A narrative-heavy RPG set in the world of **Evorath**, on its southern continent **Thalvath** *(name provisional)*, ~1650 MT. Sword-and-sorcery tone: vibrant, adventurous, magic and mythical creatures.
 
 ✅ The long-term game is **open-ended**: any playable species, base classes that branch into specialized subclasses, a set story spine with wide exploration around it. The MVP does **not** attempt this — it builds the order the vision itself implies:
 
@@ -159,7 +159,7 @@
   revealed in MVP**. Recorded abstractly in the lore bible (the-frame).
 - ✅ **7.2 Settlements fork — RESOLVED (defer).** "Where did you grow up?" is **omitted from MVP** entirely (not just flavor-only) and held for V1+, when geography is settled and rapport can be mechanical. Safe to defer at zero cost: the builder is data-driven (§4), so adding onboarding questions later is pure data entry, never a builder code change. Onboarding question set expected to grow across V1/V2.
 - ✅ **7.3 Combat — DEFERRED (decided).** MVP is pure narrative + skill checks; no combat system. Combat is a large system reserved for a later release.
-- 🟡 **7.4 First settlement — SETTLED (bar name).** A small, **seasonal/mobile fishing encampment** a short way **east** of the wreck: tents, drying racks, beached boats, fisher families, maybe a small garden plot. Fishes local grounds for some seasons, then relocates X km down-shore to fresh grounds (grounded in real migratory-fishery practice). Design payoffs: (1) **impermanence is the in-fiction reason the "town" isn't built out** — not a shortcut; (2) the **"gate" becomes a threshold** fitting the scale — edge of camp / a wary lookout clocking a stranger from the surf; (3) sea-dependent + already-suspicious (real fishing camps lived with territorial friction, boat theft, sabotage) makes it the hottest possible **frame-amplifier** (§5.8); (4) **stranger-from-the-sea** friction stacks onto species/origin friction at the threshold. **Still open:** a name.
+- ✅ **7.4 First settlement — SETTLED.** A small, **seasonal/mobile fishing encampment** a short way **east** of the wreck: tents, drying racks, beached boats, fisher families, maybe a small garden plot. Fishes local grounds for some seasons, then relocates X km down-shore to fresh grounds (grounded in real migratory-fishery practice). Design payoffs: (1) **impermanence is the in-fiction reason the "town" isn't built out** — not a shortcut; (2) the **"gate" becomes a threshold** fitting the scale — edge of camp / a wary lookout clocking a stranger from the surf; (3) sea-dependent + already-suspicious (real fishing camps lived with territorial friction, boat theft, sabotage) makes it the hottest possible **frame-amplifier** (§5.8); (4) **stranger-from-the-sea** friction stacks onto species/origin friction at the threshold. **Name — RESOLVED:** none. A seasonal, mobile camp carries no fixed proper name; it's referred to by the island (**Tethryn**) or descriptively ("the fishing camp"). The camp is now fleshed out in the lore bible (an exclusively-elven, generational maritime community whose eldest survived the merfolk war).
 - 🟡 **7.5 Mechanical mappings — mostly RESOLVED into §5.12.** Settled: species attributes, racial/class/origin skills, origin gate-flags, upbringing/sex as flavor, Hájje bias, Human full flexibility, open attribute-allocation direction, **trait structure (adult-background question; Brine in Blood as a background trait; traits intentionally asymmetric)**. **Residual micro-decisions:** (a) overlap rule — redirect vs. stack (*leaning redirect*); (b) exact creation math (attribute bases, pool sizes) → focused systems pass; (c) provisional skill/trait names reconcile at 7.7.
 - 🟡 **7.6 Art pipeline.** Approach settled (see §5.7): manual authoring in the automatable family, locked set, decoupled from the build. **Still open:** (a) FLUX vs. Stable Diffusion — to be locked in the dedicated art/style session; (b) design of the *full* in-the-loop generation pipeline for later releases (license allowlist, provenance logging, commit-gate enforcement) once asset volume justifies it.
 - 📌 **7.7 Skill set — bookmarked (revisit after MVP story is written).** Current list is intentionally light (early draft). Don't finalize MVP skills abstractly — derive them from the written content. Once the full slice exists, audit that (a) every skill the beats call on exists, and (b) every stat shown on the confirm screen earns at least one moment in the slice — no orphan/dormant stats (visible-tabletop fairness). Long-term: flesh out the general skill list for the whole game.
@@ -292,10 +292,11 @@ Full species roster · subclasses · free exploration of the opening area · exp
 - ✅ Separate, human-authored reference (world bible tracked outside this spec — see
   header), but the MVP build depends on an **MVP-scoped slice**: only the canon the
   beach→road→gate slice and guardrails need. Rest is author-canon / V1, parked.
+- ✅ **Status — drafted** (`lore_bible.md`): Setting · Geography · The Frame · Factions & Peoples · Timeline & Calendar · Tone & Register · Glossary. Two-tier discipline held throughout — author-only canon stays out of every section.
 - ✅ **Two tiers by location** (§5.12): agent-readable abstract lore in repo `lore/`
   where lore-reviewer/narrative-writer load it; author-only full canon outside any path
   an agent reads.
-- 🟡 **Format:** modular markdown by domain (factions, species, geography, timeline,
+- ✅ **Format (as built):** modular markdown by domain (factions, species, geography, timeline,
   the-frame, tone, glossary), canon-status tags, deferred material marked. Guardrail-
   critical facts (abstract Hájje heritage, frame's true cause incl. 7.1, tone band)
   stated explicitly. Glossary/proper-noun index seeds the IP deny-list (§5.11).
