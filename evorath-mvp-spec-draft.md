@@ -5,10 +5,14 @@
 > This is the MVP scope only. The world bible and later releases (V1+) are tracked separately. Nothing here is final; it's the living contract for the first autonomous release.
 
 > **── HANDOFF / CURRENT STATE ──**
-> **Settled:** vision & staging (§1), autonomy model (§2), tech stack — Ren'Py + pure-Python systems (§3), layer contract (§4), MVP scope incl. character builder, beach opening, chapter arc, town-gate curtain (§5.1–5.5), systems exercised (§5.6), art approach — manual authoring in FLUX/SD, locked set (§5.7), narrative spine — merfolk red herring (§5.8), system kernel — d20+attr+skill vs DC, no combat (§5.9), advantage/disadvantage model (§5.10), IP guardrail (§5.11), creation mappings — species/skills/traits/origins (§5.12). build environment & guardrails (§9) — four subagents, the hook set, the human-owned DoD gate, environment-vs-build boundary. **MVP-scoped lore bible drafted** (§9.9).
-> **Next up:** the **art/style lock** (§7.6 — FLUX vs SD, the locked set, the style bible), then the build itself, in Claude Code. (7.1 resolved; lore bible drafted.)
-> **Still open:** 7.5 minor math/overlap · 7.6 FLUX-vs-SD (art session) · 7.7 skill/stat reconciliation (after story written) · 7.9 nat-20/nat-1 rule · 7.13 build-env firm-ups.
-> **Dedicated future sessions:** art/style lock (FLUX vs SD + prompts + style bible); the build itself (in Claude Code, not here).
+> **Settled (add):** art/style lock — FLUX.2 hosted (§7.6a resolved), style bible direction
+>   locked, all 3 MVP backgrounds done (§5.7). PC never shown in narrative — combat-token
+>   only (§5.7). Curtain = camp threshold, not gate (§5.5). Background-continuity-by-narration
+>   note (§5.4). Camp sea-defenses now canon (bible).
+> **Next up:** remaining MVP art, each its own focused chat — (1) the NPC sprite (elf lookout,
+>   needs a short character brief), (2) UI (art + Ren'Py GUI). Then the build, in Claude Code.
+> **Still open:** 7.5 micro-math · 7.7 skill/stat reconciliation (after story) · 7.9 nat-20/nat-1
+>   · 7.13 build-env firm-ups.
 
 ---
 
@@ -76,6 +80,16 @@
 1. ✅ **Beach** — wake, paced chargen, debris search.
 2. 🟡 **The road** — 1–2 beats (a choice + a skill check) that exercise the loop a second time under different conditions.
 3. ✅ **First town gate** — arrival = MVP curtain.
+- 🟡 **Background continuity is carried by narration, not camera-matching.** The beach and
+  road backgrounds are framed from different vantage points (wake shot looks seaward at the
+  wreck; road shots look along the coast). This is canon-consistent: the camp lies east of
+  the wreck on Tethryn's north shore (bible/§7.4), so the player turns and heads east, sea on
+  the left — exactly as the road art shows; the beach shot's right-side headland is that same
+  eastward direction. **Constraint for narrative-writer:** the `.rpy` must make the movement
+  explicit (wake facing the sea at the wreck → head east along the coast, sea to the left,
+  toward the distant headland → camp threshold) so background cuts read coherently. No spatial
+  contradiction permitted between described direction and shown orientation. Sequence +
+  described direction = the narrative's job; the art is consistent with it.
 
 ### 5.5 MVP Curtain — The Town Gate
 - 🟡 The gate hosts **one reactive NPC encounter** that pays off a creation flag (species / Erathal origin / ship-reason changes the exchange). This proves the chargen→consequence loop end to end.
@@ -93,12 +107,31 @@
 ✅ Character creation · stats · skill checks · choices · inventory · flags · save/load.
 
 ### 5.7 Art & Assets (MVP)
+- ✅ **Style bible — direction locked.** Stylized hand-painted fantasy illustration:
+  semi-realistic, clean readable shapes, visible painterly brushwork; warm-dawn palette
+  (golds, soft teals, sand-beige, cool shadow); soft diffused light; illustrated-VN /
+  concept-art register, explicitly NOT photorealistic. Chosen functionally — forgiving of
+  custom-species anatomy, holds consistency across a set, reads at background/sprite/token
+  scale, fits the §1 hopeful-Teen tone. The confirmed beach prompt is the **seed style
+  language** every other asset inherits.
+- ✅ **Two visual registers (named, not a defect):** FLUX = illustrative layer (backgrounds,
+  sprites, UI); Inkarnate = cartographic layer (post-MVP overworld map; battle maps if combat
+  lands). Inkarnate commercial rights covered by the paid subscription; it stays a human-hand
+  tool (no API, outside the agent asset lane).
+- ✅ **PC is never shown in narrative — combat token only.** The player character has no
+  narrative sprite; its sole on-screen representation is a token on the combat board (V2+,
+  with combat). MVP and pre-combat releases need zero PC art. Bounds art volume (no
+  species × class × sex sprite combinatorics) and reserves narrative sprites for NPCs.
 - ✅ **Decoupled from the build.** Art is authored/locked *outside* the autonomous run. The agent never generates images — it only references existing files in an approved asset folder. The "every referenced asset exists" check (§6) is the entire enforcement story for MVP. No generator in the autonomous path → no ToS risk, no per-run cost, no fragility.
 - ✅ **Manual authoring in the automatable family.** The MVP set is generated by hand (via a UI, no scripting) using the *same model family* we'll automate with later — **FLUX or Stable Diffusion**, NOT MidJourney. This is what makes post-MVP replication reliable: style does not transfer across model families via prompt text, and the consistency tooling (LoRAs, reference-image conditioning) lives in the FLUX/SD ecosystem, not MidJourney's closed model.
 - ✅ **The locked set doubles as the style bible** and as future reference/training material to pin the look downstream.
 - ✅ **License discipline:** ship only on commercially-clear licenses (e.g. FLUX Schnell = Apache-2.0; SD3.5/SDXL = Stability Community License, free under $1M revenue). Avoid non-commercial variants (e.g. FLUX Dev local license).
 - ✅ **MVP art surface is small:** ~3 backgrounds (beach, road, town gate), 1–2 NPC sprites, UI. A fixed set, generated and locked in one focused session.
-- 🟡 MidJourney retained only for *ideation/moodboarding* (already paid for), never for shipped assets.
+- ✅ **Asset convention (locked set):** backgrounds live in `game/images/bg/`, named
+  `bg_<place>[_<qualifier>]` — content-based (named for what they depict, not story order).
+  MVP backgrounds complete: bg_beach_wreck, bg_coast_path, bg_camp_edge. The §6
+  "every referenced asset exists" check enforces filename ↔ script-reference match; the
+  narrative references these names (e.g. `scene bg camp edge`) and conforms to it.
 
 ### 5.9 System Kernel (MVP)
 - ✅ **Resolution:** d20 + Attribute + Skill vs. DC (difficulty bands 5–30, per the system bible). Advantage/disadvantage = roll 2d20, take higher/lower; **every trigger explicitly authored** (no GM). Refines §4 `check_skill` → roughly `check(attribute, skill, dc, adv=None)`.
@@ -159,9 +192,27 @@
   revealed in MVP**. Recorded abstractly in the lore bible (the-frame).
 - ✅ **7.2 Settlements fork — RESOLVED (defer).** "Where did you grow up?" is **omitted from MVP** entirely (not just flavor-only) and held for V1+, when geography is settled and rapport can be mechanical. Safe to defer at zero cost: the builder is data-driven (§4), so adding onboarding questions later is pure data entry, never a builder code change. Onboarding question set expected to grow across V1/V2.
 - ✅ **7.3 Combat — DEFERRED (decided).** MVP is pure narrative + skill checks; no combat system. Combat is a large system reserved for a later release.
-- ✅ **7.4 First settlement — SETTLED.** A small, **seasonal/mobile fishing encampment** a short way **east** of the wreck: tents, drying racks, beached boats, fisher families, maybe a small garden plot. Fishes local grounds for some seasons, then relocates X km down-shore to fresh grounds (grounded in real migratory-fishery practice). Design payoffs: (1) **impermanence is the in-fiction reason the "town" isn't built out** — not a shortcut; (2) the **"gate" becomes a threshold** fitting the scale — edge of camp / a wary lookout clocking a stranger from the surf; (3) sea-dependent + already-suspicious (real fishing camps lived with territorial friction, boat theft, sabotage) makes it the hottest possible **frame-amplifier** (§5.8); (4) **stranger-from-the-sea** friction stacks onto species/origin friction at the threshold. **Name — RESOLVED:** none. A seasonal, mobile camp carries no fixed proper name; it's referred to by the island (**Tethryn**) or descriptively ("the fishing camp"). The camp is now fleshed out in the lore bible (an exclusively-elven, generational maritime community whose eldest survived the merfolk war).
+- ✅ **7.4 First settlement — SETTLED.** A small, **seasonal/mobile fishing encampment** a short way **east** of the wreck: tents, drying racks, beached boats, fisher families, maybe a small garden plot. Fishes local grounds for some seasons, then relocates X km down-shore to fresh grounds (grounded in real migratory-fishery practice). Design payoffs: (1) **impermanence is the in-fiction reason the "town" isn't built out** — not a shortcut; (2) - 🟡 **MVP curtain = the camp threshold, not a gate.** The seasonal fishing camp has no gate
+  or wall (impermanent tents — the in-fiction reason the "town" isn't built out; §7.4). The
+  curtain is the camp's edge, where a wary elf lookout clocks a stranger from the surf.
+  "Gate" language retired throughout §5.5 in favor of "threshold / camp edge." (3) sea-dependent + already-suspicious (real fishing camps lived with territorial friction, boat theft, sabotage) makes it the hottest possible **frame-amplifier** (§5.8); (4) **stranger-from-the-sea** friction stacks onto species/origin friction at the threshold. **Name — RESOLVED:** none. A seasonal, mobile camp carries no fixed proper name; it's referred to by the island (**Tethryn**) or descriptively ("the fishing camp"). The camp is now fleshed out in the lore bible (an exclusively-elven, generational maritime community whose eldest survived the merfolk war). 
+  - **Camp sea-defenses (canon).** The seasonal fishing camp keeps modest, improvised defenses
+  facing the water: weathered warding-stakes and small carved sea-charms set toward the surf,
+  plus a simple raised lookout perch. They read as an expression of the world's commonplace
+  domestic warding (cf. runestones), born of lingering merfolk-war fear rather than any present
+  threat — merfolk have been unseen since the 1294 truce. **Frame tie-in:** a camp visibly
+  braced against the sea deepens the plausibility of the staged "merfolk attack" (the-frame /
+  §5.8) — people already primed to fear the sea-folk.
 - 🟡 **7.5 Mechanical mappings — mostly RESOLVED into §5.12.** Settled: species attributes, racial/class/origin skills, origin gate-flags, upbringing/sex as flavor, Hájje bias, Human full flexibility, open attribute-allocation direction, **trait structure (adult-background question; Brine in Blood as a background trait; traits intentionally asymmetric)**. **Residual micro-decisions:** (a) overlap rule — redirect vs. stack (*leaning redirect*); (b) exact creation math (attribute bases, pool sizes) → focused systems pass; (c) provisional skill/trait names reconcile at 7.7.
-- 🟡 **7.6 Art pipeline.** Approach settled (see §5.7): manual authoring in the automatable family, locked set, decoupled from the build. **Still open:** (a) FLUX vs. Stable Diffusion — to be locked in the dedicated art/style session; (b) design of the *full* in-the-loop generation pipeline for later releases (license allowlist, provenance logging, commit-gate enforcement) once asset volume justifies it.
+- ✅ **7.6 Art — model decision RESOLVED.** FLUX over Stable Diffusion (FLUX.2 family),
+  generated **hosted**. Local ruled out (8GB-VRAM card can't run FLUX.2 well; hosted also
+  removes the constraint and suits the small MVP asset count). License discipline on the
+  hosted path: commercial clarity comes from the **host's output terms**, confirmed in
+  writing per host — not inferred from the model's open-weights license. Shippable tiers:
+  Pro/Flex (hosted, commercial) or Klein (Apache-2.0); **FLUX.2 Dev is non-commercial —
+  excluded.** Pro's multi-reference input (~8–10 reference images) is the planned route to
+  downstream character/token consistency (the fix for prompt-only failure on novel creatures).
+  **Still open:** (b) full in-the-loop pipeline for later releases (unchanged).
 - 📌 **7.7 Skill set — bookmarked (revisit after MVP story is written).** Current list is intentionally light (early draft). Don't finalize MVP skills abstractly — derive them from the written content. Once the full slice exists, audit that (a) every skill the beats call on exists, and (b) every stat shown on the confirm screen earns at least one moment in the slice — no orphan/dormant stats (visible-tabletop fairness). Long-term: flesh out the general skill list for the whole game.
 - 📌 **7.8 Advantage/Disadvantage design — RESOLVED into §5.10.** (Trigger taxonomy, net-sign resolution, one-axis-per-source, labels.) Remaining growth (full rapport, deep trait tree) is V1+ content, not an open MVP question.
 - ❓ **7.9 Natural 20 / Natural 1 rule.** Does a nat 20 auto-succeed / nat 1 auto-fail (and/or carry a crit/fumble flavor beat)? Free design choice — confirmed not an IP issue (§5.11), and direction is conventional, not inherited. Matters more in a *visible-dice* game (a seen nat 20 should probably *mean* something). Interacts with tuning. Lean: embrace some crit/fumble feel; exact form TBD (auto-success only? bonus debris find on a nat 20 search? flavor only?).
