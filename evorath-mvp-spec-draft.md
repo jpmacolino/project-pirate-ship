@@ -5,15 +5,11 @@
 > This is the MVP scope only. The world bible and later releases (V1+) are tracked separately. Nothing here is final; it's the living contract for the first autonomous release.
 
 > **── HANDOFF / CURRENT STATE ──**
-> **Settled (add):** art/style lock — FLUX.2 hosted (§7.6a resolved), style bible direction
->   locked, all 3 MVP backgrounds done (§5.7). PC never shown in narrative — combat-token
->   only (§5.7). Curtain = camp threshold, not gate (§5.5). Background-continuity-by-narration
->   note (§5.4). Camp sea-defenses now canon (bible).
-> **Next up:** remaining MVP art, each its own focused chat — (1) the NPC sprite (elf lookout,
->   needs a short character brief), (2) UI (art + Ren'Py GUI). Then the build, in Claude Code.
-> **Still open:** 7.5 micro-math · 7.7 skill/stat reconciliation (after story) · 7.9 nat-20/nat-1
->   · 7.13 build-env firm-ups.
-
+> **Settled (add):** lookout NPC sprite locked (generation-6173 → game/images/sprites/lookout.png);
+>   sprite asset convention set (§5.7). MVP NPC-sprite count resolved to one — base figure only,
+>   reactive payoff via dialogue/labels, expression variants → V1.
+> **Next up:** final MVP art item — UI (art + Ren'Py GUI), its own focused chat. Then the build,
+>   in Claude Code.
 ---
 
 ## 1. Vision & Staging
@@ -132,6 +128,12 @@
   MVP backgrounds complete: bg_beach_wreck, bg_coast_path, bg_camp_edge. The §6
   "every referenced asset exists" check enforces filename ↔ script-reference match; the
   narrative references these names (e.g. `scene bg camp edge`) and conforms to it.
+  - ✅ **Sprite convention (locked set):** NPC sprites live in `game/images/sprites/`, named by a
+  single-word character handle that doubles as the Ren'Py show-tag — optional expression states
+  added later as space-suffixed attribute variants (`lookout` now; `lookout wary` if V1 wants it),
+  following Ren'Py's tag/attribute idiom rather than the background `bg_` prefix. MVP sprite
+  complete: `lookout` — the camp elder lookout (§5.5/§7.4), base figure only; reactive payoff
+  carried by dialogue + adv/disadv labels (§5.10), expression variants deferred to V1.
 
 ### 5.9 System Kernel (MVP)
 - ✅ **Resolution:** d20 + Attribute + Skill vs. DC (difficulty bands 5–30, per the system bible). Advantage/disadvantage = roll 2d20, take higher/lower; **every trigger explicitly authored** (no GM). Refines §4 `check_skill` → roughly `check(attribute, skill, dc, adv=None)`.
