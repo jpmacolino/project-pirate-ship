@@ -2,28 +2,19 @@
   "$comment": "Project-scoped, committed. Hooks invoke Python in exec form (command + args) so they run identically on Windows/macOS/Linux. If `python` isn't on PATH on Windows, change it to `py`.",
   "permissions": {
   "allow": [
-    "Bash(python *)",
-    "Bash(.venv/Scripts/python.exe *)",
-    "Bash(.venv/Scripts/python *)",
-    "Bash(git add *)",
-    "Bash(git commit *)",
-    "Bash(git status *)",
-    "Bash(git log *)",
-    "Bash(git diff *)",
-    "Bash(ls *)",
-    "Bash(cat *)",
-    "Bash(grep *)",
-    "Bash(head *)",
-    "Bash(tail *)",
-    "Bash(find *)",
+    "Bash(*)",
+    "Edit(//c/dev/project-pirate-ship/**)",
+    "Write(//c/dev/project-pirate-ship/**)",
+    "Read(//c/dev/project-pirate-ship/**)",
     "Read(//c/Users/raide/.claude/projects/**)"
   ],
   "deny": [
     "Bash(rm -rf *)",
     "Bash(git push *)",
+    "Bash(sudo *)",
     "Bash(curl *)",
     "Bash(wget *)",
-    "Bash(sudo *)"
+    "Bash(* --no-verify*)"
   ]
 },
   "hooks": {
