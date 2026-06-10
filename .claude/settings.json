@@ -1,5 +1,17 @@
 {
   "$comment": "Project-scoped, committed. Hooks invoke Python in exec form (command + args) so they run identically on Windows/macOS/Linux. If `python` isn't on PATH on Windows, change it to `py`.",
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "PowerShell(python *)",
+      "PowerShell(Set-Location *)",
+      "PowerShell(git add *)",
+      "PowerShell(git commit *)",
+      "Read(//c/Users/raide/.claude/projects/**)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -45,8 +57,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/session_context.py"]
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/session_context.py"],
+            "command": "python"
           }
         ]
       }

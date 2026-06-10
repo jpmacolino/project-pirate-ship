@@ -1,0 +1,1 @@
+- [Canon recurring check-points](canon-recurring-points.md) — frame integrity, merfolk, camp disposition, Hájje guardrail, geography/direction, tone, IP — run on every beat review

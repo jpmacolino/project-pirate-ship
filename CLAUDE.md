@@ -35,7 +35,10 @@ The narrative agent is **not** its own lore judge.
 - **Advantage/disadvantage = net sign, count don't stack** (§5.10). Skills move the number;
   traits/situation toggle advantage. Every applied adv/disadv carries a player-visible label.
 
-## Definition of Done (§6) — run `/dod`
+## Definition of Done (§6) — how to run the battery
+Run the battery with the project venv's interpreter by explicit path — never bare `python`,
+which resolves against whatever PATH the shell happens to have:
+`.venv/Scripts/python.exe run_dod.py` (from repo root; `--static` for the fast stdlib-only pass).
 pytest green · renpy lint clean · all 6 paths (3 species x 2 classes) reach the gate ·
 save/load works · at least one creation flag alters a branch and NO orphan mechanical flags ·
 every referenced asset exists.
