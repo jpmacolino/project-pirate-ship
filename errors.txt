@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/screens.rpy", line 123: 'xfill' is not a keyword argument or valid child of the add statement.
+    add FileScreenshot(slot) xfill True ysize 144
+                                  ^
+
+Ren'Py Version: Ren'Py 8.5.3.26051504
+Wed Jun 10 13:15:21 2026

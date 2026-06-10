@@ -1,17 +1,31 @@
 {
   "$comment": "Project-scoped, committed. Hooks invoke Python in exec form (command + args) so they run identically on Windows/macOS/Linux. If `python` isn't on PATH on Windows, change it to `py`.",
   "permissions": {
-    "allow": [
-      "Bash(python *)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "PowerShell(python *)",
-      "PowerShell(Set-Location *)",
-      "PowerShell(git add *)",
-      "PowerShell(git commit *)",
-      "Read(//c/Users/raide/.claude/projects/**)"
-    ]
-  },
+  "allow": [
+    "Bash(python *)",
+    "Bash(.venv/Scripts/python.exe *)",
+    "Bash(.venv/Scripts/python *)",
+    "Bash(git add *)",
+    "Bash(git commit *)",
+    "Bash(git status *)",
+    "Bash(git log *)",
+    "Bash(git diff *)",
+    "Bash(ls *)",
+    "Bash(cat *)",
+    "Bash(grep *)",
+    "Bash(head *)",
+    "Bash(tail *)",
+    "Bash(find *)",
+    "Read(//c/Users/raide/.claude/projects/**)"
+  ],
+  "deny": [
+    "Bash(rm -rf *)",
+    "Bash(git push *)",
+    "Bash(curl *)",
+    "Bash(wget *)",
+    "Bash(sudo *)"
+  ]
+},
   "hooks": {
     "PreToolUse": [
       {

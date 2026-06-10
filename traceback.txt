@@ -1,0 +1,36 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 29, in script
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+  File "game/script.rpy", line 29, in <module>
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: function() missing required argument 'globals' (pos 2)
+
+-- Full Traceback ------------------------------------------------------------
+
+Traceback (most recent call last):
+  File "game/script.rpy", line 29, in script
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+  File "renpy/ast.py", line 2473, in execute
+    self.set()
+    ~~~~~~~~^^
+  File "renpy/ast.py", line 2485, in set
+    value = renpy.python.py_eval_bytecode(self.code.bytecode)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "renpy/python.py", line 1301, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "game/script.rpy", line 29, in <module>
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/character.py", line 1903, in Character
+    return type(kind)(name, kind=kind, **properties)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: function() missing required argument 'globals' (pos 2)
+
+Windows-11-10.0.26200-SP0 AMD64
+Ren'Py 8.5.3.26051504
+Evorath 0.1.0-mvp
+Wed Jun 10 13:41:52 2026

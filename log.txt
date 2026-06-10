@@ -1,0 +1,139 @@
+2026-06-10 17:41:52 UTC
+Windows-11-10.0.26200-SP0
+Ren'Py 8.5.3.26051504
+
+Early init took 30 ms
+Loading error handling took 14 ms
+Loading script took 61 ms
+Loading save slot metadata took 13 ms
+Loading persistent took 0 ms
+
+Full traceback:
+  File "game/script.rpy", line 29, in script
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+  File "renpy/ast.py", line 2473, in execute
+    self.set()
+    ~~~~~~~~^^
+  File "renpy/ast.py", line 2485, in set
+    value = renpy.python.py_eval_bytecode(self.code.bytecode)
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "renpy/python.py", line 1301, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "game/script.rpy", line 29, in <module>
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "renpy/character.py", line 1903, in Character
+    return type(kind)(name, kind=kind, **properties)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: function() missing required argument 'globals' (pos 2)
+
+While running game code:
+  File "game/script.rpy", line 29, in script
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+  File "game/script.rpy", line 29, in <module>
+    define lookout_npc = Character("Lookout", color="#c8a96e")
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: function() missing required argument 'globals' (pos 2)
+Running init code took 35 ms
+Loading analysis data took 3 ms
+Analyze and compile ATL took 1 ms
+Reloading save slot metadata took 2 ms
+Dump and make backups took 0 ms
+Cleaning cache took 0 ms
+Making clean stores took 0 ms
+Initial gc took 24 ms
+DPI scale factor: 1.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 209 ms
+Init translation took 0 ms
+Cleaning stores took 0 ms
+Load screen analysis took 8 ms
+Analyze screens took 0 ms
+Save screen analysis took 0 ms
+Save pyanalysis took 0 ms
+Save bytecode took 0 ms
+﻿Ren'Py 8.5.3.26051504 lint report, generated at: Wed Jun 10 13:41:53 2026
+
+game/camp.rpy:22 Could not evaluate 'lookout_npc' in the who part of a say statement.
+Perhaps you forgot to define a character?
+
+game/camp.rpy:24 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:25 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:29 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:31 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:32 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:38 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:40 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:58 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:59 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:62 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:67 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:70 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:71 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:73 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:74 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:80 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:81 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:85 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:86 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:90 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:92 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:95 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:102 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:103 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:106 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:112 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:113 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:120 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:124 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:126 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:129 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:130 Could not evaluate 'lookout_npc' in the who part of a say statement.
+
+game/camp.rpy:133 Could not evaluate 'lookout_npc' in the who part of a say statement.
+It is advised to set config.check_conflicting_properties to True.
+
+
+Statistics:
+
+The game contains 186 dialogue blocks, containing 1,990 words and 10,871
+characters, for an average of 10.7 words and 58 characters per block.
+
+The game contains 10 menus, 4 images, and 12 screens.
+
+
+Lint is not a substitute for thorough testing. Remember to update Ren'Py
+before releasing. New releases fix bugs and improve compatibility.
