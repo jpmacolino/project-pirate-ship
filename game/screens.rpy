@@ -120,7 +120,7 @@ screen file_slots(title):
             button:
                 action FileAction(slot)
                 has vbox
-                add FileScreenshot(slot) xfill True ysize 144
+                add FileScreenshot(slot) ysize 144
                 text FileTime(slot, format=_("{#file_time}%A, %B %d %Y, %H:%M"), empty=_("empty slot")):
                     size 16
                 text FileSaveName(slot):
