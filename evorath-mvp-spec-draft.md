@@ -8,8 +8,12 @@
 > **Settled (add):** lookout NPC sprite locked (generation-6173 → game/images/sprites/lookout.png);
 >   sprite asset convention set (§5.7). MVP NPC-sprite count resolved to one — base figure only,
 >   reactive payoff via dialogue/labels, expression variants → V1.
-> **Next up:** final MVP art item — UI (art + Ren'Py GUI), its own focused chat. Then the build,
->   in Claude Code.
+> **Settled (add):** GUI art lane complete — every skinned `game/gui/` slot locked (§5.7):
+>   textbox, frame (workhorse 9-slice), sheet_frame (set piece), game_menu, main_menu (=
+>   bg_coast_path copy), window_icon + evorath_mark (from the canonical favicon). Two-frame split recorded.
+> **Next up:** hand the spec to Claude Code for the autonomous MVP build (§2 + §9 cage).
+> **Open before/at build (environment, non-blocking):** §9.8 gate-invokes-venv-python-by-path (🟡);
+>   §9.9 lore-reviewer preload (🟡).
 ---
 
 ## 1. Vision & Staging
@@ -134,28 +138,37 @@
   following Ren'Py's tag/attribute idiom rather than the background `bg_` prefix. MVP sprite
   complete: `lookout` — the camp elder lookout (§5.5/§7.4), base figure only; reactive payoff
   carried by dialogue + adv/disadv labels (§5.10), expression variants deferred to V1.
-  - 🟡 **GUI asset convention (locked set):** game resolution 1280×720 (16:9), matching the
-  locked backgrounds — Ren'Py's default GUI base, so all slots are 1:1, no scaling. MVP skins
-  a small set in `game/gui/`; all other slots keep their standard template PNGs (so §6's
-  "every referenced asset exists" check passes; project scaffolded from the stock GUI
-  template — §9.8). Skinned slots: `main_menu.png` (1280×720, tree-of-life hero),
-  `game_menu.png` (1280×720, parchment), `textbox.png` (1280×185, subtle aged paper),
-  `frame.png` (9-slice, parchment/canvas — also the visible-tabletop surface for
-  rolls/DCs/adv-disadv labels, §5.10), `window_icon.png` (256×256, tree-of-life mark), and a
-  non-standard reusable emblem `evorath_mark.png` (~512×512, transparent). `namebox.png`
-  optional (config-default acceptable). **9-slice constraint:** frame/namebox keep a
-  low-detail, evenly-textured center (survives stretching); decorative interest lives in the
-  border/corners. **Legibility constraint:** textbox + frame author at dawn palette with high
-  value contrast where text sits. Border insets for the 9-slice frames are set in `gui.rpy`
-  by Claude Code (build) against the authored art. Unifying metaphor: a sailor-scholar's
-  records — parchment, canvas, rope; tree of life as maker's mark (signature, not wallpaper).
-  - ✅ **GUI chrome exempt from the FLUX/SD-family rule.** The "automatable family, not
-  MidJourney" rule (above) is scoped to the *content* asset families the downstream pipeline
-  reproduces (backgrounds, sprites, tokens). GUI chrome is finite, non-character, and outside
-  that pipeline, so MidJourney is acceptable for it. Only palette/finish coherence with the
-  FLUX backgrounds binds — low-risk, since chrome shares no subject matter with scenes. The
-  one coherence-sensitive slot, `main_menu.png`, is sidestepped: reuse a locked FLUX
-  background + composited `evorath_mark.png` rather than generating a competing illustration.
+  - ✅ **GUI asset convention (locked set).** Game resolution 1280×720 (16:9), matching the
+  locked backgrounds — Ren'Py's default GUI base, so all slots are 1:1, no scaling. MVP skins a
+  small set in `game/gui/`; every other slot keeps its standard template PNG (so §6's "every
+  referenced asset exists" check passes; project scaffolded from the stock GUI template — §9.8).
+  All skinned files are **true PNGs** (not a JPEG renamed `.png`) — Ren'Py, `renpy lint`, and the
+  asset check key on the real format. **Skinned slots:**
+    - `textbox.png` (1280×185) — dialogue strip; calm aged parchment, thin rope along the top edge.
+    - `frame.png` (9-slice) — the **quiet workhorse**: confirm dialogs, menu boxes, and the
+      visible-tabletop dice/DC/adv-disadv panel (§5.10); calm parchment, understated for fast-read legibility.
+    - `sheet_frame.png` — the **ornate set piece**: the character-sheet confirm-screen backdrop
+      (§5.2), shown at fixed size (rendered as-authored, never 9-sliced/stretched). Lavish is a feature here — it appears once, at a weighted moment.
+    - `game_menu.png` (1280×720) — Save/Load/Preferences backdrop; a parchment sheet on a dark surround ("records desk"), calm center for the UI.
+    - `main_menu.png` (1280×720) — a **copy of `bg_coast_path`** (raw background). Title, buttons, and
+      `evorath_mark.png` are placed *over* it by Claude Code's main-menu screen; legibility darkening is the
+      `gui/overlay/main_menu.png` config slot. Nothing is baked into the file.
+    - `window_icon.png` (256×256) and `evorath_mark.png` (~512×512, transparent) — the Evorath
+      tree-of-life mark, **derived from the canonical site favicon** (rebuilt to size with clean transparency,
+      palette preserved), NOT regenerated. The mark is a separate placeable asset, layered by screens, never painted into a background.
+    - `namebox.png` — optional (config-default acceptable).
+  **Config-only, no art (Claude Code, build):** darkening overlays, buttons, bars/sliders/scrollbars,
+  `gui.rpy` palette/fonts, the 9-slice border insets (set against the authored `frame.png`/`sheet_frame.png`),
+  and the dice/DC/label screens. **9-slice constraint:** `frame.png` keeps a low-detail, evenly-textured
+  center (survives stretching); decorative interest lives in the border/corners. **Legibility constraint:**
+  `textbox.png`, `frame.png`, and `game_menu.png` stay calm and high-contrast where text/UI sits. Unifying
+  metaphor: a sailor-scholar's records — parchment, canvas, rope; the tree of life as a restrained maker's mark (signature, not wallpaper).
+  - ✅ **GUI chrome exempt from the FLUX/SD-family rule.** The "automatable family, not MidJourney" rule
+  (above) is scoped to the *content* asset families the downstream pipeline reproduces (backgrounds, sprites,
+  tokens). GUI chrome is finite, non-character, and outside that pipeline, so MidJourney is acceptable for it
+  (the MVP chrome was authored in MidJourney). Only palette/finish coherence with the FLUX backgrounds binds —
+  low-risk, since chrome shares no subject matter with scenes. The one coherence-sensitive slot, `main_menu.png`,
+  is sidestepped by reusing a locked FLUX background outright (mark layered by the screen) rather than generating a competing illustration.
 
 ### 5.9 System Kernel (MVP)
 - ✅ **Resolution:** d20 + Attribute + Skill vs. DC (difficulty bands 5–30, per the system bible). Advantage/disadvantage = roll 2d20, take higher/lower; **every trigger explicitly authored** (no GM). Refines §4 `check_skill` → roughly `check(attribute, skill, dc, adv=None)`.
