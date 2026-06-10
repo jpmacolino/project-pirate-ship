@@ -33,12 +33,3 @@ init -100 python:
         """Return True if item_id is in inventory. (§4)"""
         return _api_mod.has_item(player_state, item_id)
 
-    # ── Advantage-source convenience helpers ────────────────────────────────
-
-    def adv(label):
-        """Return an advantage source tuple: (label, +1)."""
-        return (label, 1)
-
-    def disadv(label):
-        """Return a disadvantage source tuple: (label, -1)."""
-        return (label, -1)
