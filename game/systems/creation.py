@@ -222,6 +222,27 @@ class CharacterBuilder:
         return self
 
     # ------------------------------------------------------------------
+    # Preview (used by charsheet_confirm screen)
+    # ------------------------------------------------------------------
+
+    def preview(self) -> dict:
+        """Return pre-free-point stats for the confirm screen display.
+
+        Returns a dict with:
+          attributes: {attr: current_value}  (base + bumps)
+          skills:     {skill: rank}
+          traits:     [trait_id, ...]
+          pending_free_skills: int
+        """
+        attrs = {k: ATTR_BASE + self._attr_bumps.get(k, 0) for k in ATTRIBUTES}
+        return {
+            "attributes": attrs,
+            "skills": dict(self._granted_skills),      # name -> source_label
+            "traits": list(self._granted_traits),
+            "pending_free_skills": self.pending_free_skills,
+        }
+
+    # ------------------------------------------------------------------
     # Final build
     # ------------------------------------------------------------------
 

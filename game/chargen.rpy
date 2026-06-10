@@ -1,0 +1,191 @@
+## Evorath — diegetic character builder (§5.2, §5.12)
+## "Light amnesia": identity resurfaces through the opening as fragments.
+## Called from beach.rpy (beach_wake) via: call chargen_start
+
+label chargen_start:
+    ## builder is already set to CharacterBuilder() by beach_wake before this call.
+
+    ## ── Fragment 1: SPECIES (looking at hands / reflection) ──────────────────
+
+    "You push yourself upright."
+    "Sand under your palms. Salt on your lips. The low winter sun over the water."
+    "There is debris everywhere — timber, rope, a shattered crate, things that don't matter yet."
+    "You reach for a shard of mirror-bright hull plating half-buried in the sand."
+    "In it, something looks back. Your hands."
+
+    menu:
+        "Long-fingered, with the faint luminance of elven skin. Your hair has come loose — pale gold or silver in the dawn light.":
+            $ builder.set_species("elf")
+            "An elf. Thalvath-born, or so the feeling says."
+            "That much comes back quickly."
+
+        "Broad, weathered — a human's hands. Calloused from work you almost remember.":
+            "Human hands. Practical. Nothing especially remarkable about them."
+            "Three things rise from the fog before anything else:"
+            menu:
+                "Your body — speed, strength, the sea. You've always known ships.":
+                    $ builder.set_species("human", attr_choices=["STR", "DEX"], skill_choice="Seamanship")
+                    "A sailor's build, a sailor's hands. That much you know."
+                "Your eye — prices, weight, the art of a deal. You read a room fast.":
+                    $ builder.set_species("human", attr_choices=["INT", "CHA"], skill_choice="Appraisal")
+                    "A merchant's instincts, always measuring."
+                "Your mind — books, theory, the patterns behind things.":
+                    $ builder.set_species("human", attr_choices=["SPR", "INT"], skill_choice="Arcana")
+                    "A scholar's habits. You can't look at anything without wanting to understand it."
+
+        "Dark-veined at the knuckles. Unnervingly still. Pale skin; black hair matted with seawater.":
+            $ builder.set_species("hajje")
+            "Hájje. You have spent years learning what that means to people who don't know you."
+            "Their fear is old, and inherited, and not yours to carry — but you carry it anyway."
+
+    ## ── Fragment 2: SEX ────────────────────────────────────────────────────────
+
+    "The tide pulls at something near you. You let it go."
+    "What do they call you — or rather, how do you think of yourself?"
+
+    menu:
+        "She / her.":
+            python:
+                pn_they = "she"; pn_them = "her"; pn_their = "her"
+                pn_theyre = "she's"; pn_reflexive = "herself"
+                player_state_sex = "female"
+        "He / him.":
+            python:
+                pn_they = "he"; pn_them = "him"; pn_their = "his"
+                pn_theyre = "he's"; pn_reflexive = "himself"
+                player_state_sex = "male"
+        "They / them.":
+            python:
+                pn_they = "they"; pn_them = "them"; pn_their = "their"
+                pn_theyre = "they're"; pn_reflexive = "themselves"
+                player_state_sex = "nonbinary"
+
+    ## ── Fragment 3: CLASS (what knowledge surfaces first) ──────────────────────
+
+    "You start to stand. Your body knows things your mind is still catching up to."
+    "What comes back first — the kind of knowledge that lives in muscle and instinct?"
+
+    menu:
+        "Combat. Weight, leverage, threat — you see an angle before you know you're looking.":
+            $ builder.set_class("warrior")
+            "A fighter's eye. The wreck around you is already a problem you're solving."
+
+        "Magic. There is a tremor in the air here, a wrongness you can almost name.":
+            $ builder.set_class("mage")
+            "A mage's awareness. The world has a texture most people can't feel. You feel it."
+
+    ## ── Fragment 4: ORIGIN (why were you on that ship) ─────────────────────────
+
+    "The ship. The one burning in your memory alongside the cold water."
+    "Why were you aboard?"
+
+    menu:
+        "Commerce. Goods, a contract — you were doing business on that crossing.":
+            $ builder.set_origin("merchant")
+            "A merchant. Freeport was your destination; that much is certain."
+
+        "It was your ship. Or close enough — you were crew.":
+            $ builder.set_origin("crewmate")
+            "A sailor. You knew every creak of that hull. Past tense, now."
+
+        "A new start. You came from Erathal; the south was supposed to be the beginning of something.":
+            $ builder.set_origin("immigrant")
+            "An immigrant. Erathal behind you; Thalvath ahead — until the sea had other plans."
+
+    ## ── Fragment 5: UPBRINGING (flavor — colors text) ─────────────────────────
+
+    "Older memories now. The kind that don't have hard edges."
+    "What was home, when you were young?"
+
+    menu:
+        "Two parents. Warm enough, in its way.":
+            $ _upbringing = "two_parents"
+        "One parent. You made it work.":
+            $ _upbringing = "single_parent"
+        "None to speak of. You learned to carry yourself.":
+            $ _upbringing = "orphan"
+
+    ## ── Fragment 6: ADULT BACKGROUND (the trait that pays off in this chapter) ──
+
+    "The voyage feels far away already. But before the voyage — what had your life been?"
+
+    menu:
+        "Life at sea. Docks, boats, the salt in everything.":
+            $ builder.set_background("sea_life")
+            "The sea is not a stranger. It's where you have always lived."
+        "Hard years. Struggle, scarcity, surviving what should have broken you.":
+            $ builder.set_background("hard_years")
+            "Hardship has made you dense as iron."
+        "Books and study. Libraries, apprenticeship, the quiet thrill of understanding.":
+            $ builder.set_background("scholarly")
+            "The world rewards careful attention. You've always found more in a room than most."
+
+    ## ── Fragment 7: NAME ────────────────────────────────────────────────────────
+
+    "A name."
+    "It comes back eventually, as names do."
+    $ _player_name = renpy.input("Your name:", default="", length=30).strip()
+    if not _player_name:
+        $ _player_name = "the survivor"
+
+    ## Apply flavor step to builder now that we have all pieces
+    $ builder.set_flavor(player_state_sex, _upbringing, _player_name)
+
+    ## ── Confirm screen ──────────────────────────────────────────────────────────
+
+    "Everything coheres — slowly, like a face emerging from dark water."
+    "Who you are. What you know. How you got here."
+
+    $ _pre = builder.preview()
+    call screen charsheet_confirm(
+        _pre["attributes"], _pre["skills"], _pre["traits"], _pre["pending_free_skills"]
+    )
+    $ _alloc = _return
+
+    ## Free skill picks for overlap redirects (if any)
+    if builder.pending_free_skills > 0:
+        "You've trained across more than one discipline. One more skill comes to mind."
+        menu:
+            "Diplomacy — the art of talk and negotiation.":
+                $ _free_skills = ["Diplomacy"]
+            "Endurance — stamina, hardiness, the long road.":
+                $ _free_skills = ["Endurance"]
+            "Athletics — strength, agility, physical mastery.":
+                $ _free_skills = ["Athletics"]
+            "Survival — living off the land, reading conditions.":
+                $ _free_skills = ["Survival"]
+    else:
+        $ _free_skills = []
+
+    ## Finalise character
+    $ builder.allocate_free_points(_alloc, free_skills=_free_skills)
+    $ player_state = builder.build()
+    $ player_state.name = _player_name
+
+    ## ── Upbringing flavour (consumed here; flag already in player_state) ─────────
+    if has_flag("upbringing:two_parents"):
+        "A house with two parents. The memory is distant, but it was warm."
+    elif has_flag("upbringing:single_parent"):
+        "One parent. The house was smaller for it. Still a house."
+    elif has_flag("upbringing:orphan"):
+        "No house to look back on. You learned early to build your own shelter."
+
+    ## ── Static flag declarations (creation flags already in player_state; ───────
+    ## ── literals here satisfy the orphan_flags static checker) ─────────────────
+    if False:
+        $ set_flag("species:elf")
+        $ set_flag("species:human")
+        $ set_flag("species:hajje")
+        $ set_flag("class:warrior")
+        $ set_flag("class:mage")
+        $ set_flag("origin:merchant")
+        $ set_flag("origin:crewmate")
+        $ set_flag("origin:immigrant")
+        $ set_flag("background:sea_life")
+        $ set_flag("background:hard_years")
+        $ set_flag("background:scholarly")
+        $ set_flag("upbringing:two_parents")
+        $ set_flag("upbringing:single_parent")
+        $ set_flag("upbringing:orphan")
+
+    return
