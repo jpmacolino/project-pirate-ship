@@ -18,7 +18,6 @@ screen main_menu():
         add Image("images/gui/evorath_mark.png") xalign 0.5 ysize 120 fit "contain"
         null height 10
         text "EVORATH" xalign 0.5 color "#f0e0c0" size 64 bold True
-        text "A Journey Begins" xalign 0.5 color "#c8a96e" size 22
 
     vbox:
         xalign 0.5
@@ -40,6 +39,12 @@ screen main_menu():
             xalign 0.5
             action Quit(confirm=not main_menu)
 
+style main_menu_button_text:
+    idle_color "#ece0c6"        ## light cream — reads on the darkened coast
+    hover_color "#ffe6b0"       ## brightens on hover (dark surface: highlight by lightening)
+    selected_color "#ffe6b0"
+    outlines [ (absolute(2), "#000000bb", absolute(0), absolute(0)) ]  ## halo so text survives the bright sand
+    size 30                     ## tunable — gives the buttons menu presence
 
 ## ─── Game Menu (save / load / prefs) ────────────────────────────────────────
 
@@ -256,7 +261,7 @@ screen dice_result(result):
 
             ## Header
             $ _sk_label = (result.skill or result.attribute) + " CHECK"
-            text _sk_label.upper() xalign 0.5 bold True color "#c8a96e" size 20
+            text _sk_label.upper() xalign 0.5 bold True color gui.accent_color size 20
 
             null height 4
 
@@ -264,12 +269,12 @@ screen dice_result(result):
             hbox:
                 xalign 0.5
                 spacing 6
-                text "d20 " color "#c8b89a" size 20
-                text "[result.die_used]" bold True color "#f0e0c0" size 26
-                text "  +  " color "#c8b89a" size 20
-                text "[result.attribute] [result.attr_value]" color "#c8b89a" size 20
+                text "d20 " color gui.text_color size 20
+                text "[result.die_used]" bold True color gui.text_color size 26
+                text "  +  " color gui.text_color size 20
+                text "[result.attribute] [result.attr_value]" color gui.text_color size 20
                 if result.skill_rank > 0:
-                    text "  +  [result.skill] [result.skill_rank]" color "#c8b89a" size 20
+                    text "  +  [result.skill] [result.skill_rank]" color gui.text_color size 20
 
             ## Advantage dice notation (if not straight roll)
             if result.net_adv != 0:
@@ -285,7 +290,7 @@ screen dice_result(result):
             ## Advantage / Disadvantage sources
             for source in result.adv_sources:
                 if source[1] > 0:
-                    text "✦ Advantage: [source[0]]" color "#c8a96e" size 17 xpos 20
+                    text "✦ Advantage: [source[0]]" color gui.accent_color size 17 xpos 20
                 else:
                     text "✦ Disadvantage: [source[0]]" color "#cc8844" size 17 xpos 20
 
@@ -293,11 +298,11 @@ screen dice_result(result):
 
             ## Result
             if result.nat20:
-                text "✦ NATURAL 20 — AUTO-SUCCESS" xalign 0.5 bold True color "#ffd700" size 22
+                text "✦ NATURAL 20 — AUTO-SUCCESS" xalign 0.5 bold True color "#b8860b" size 22
             elif result.nat1:
                 text "✦ NATURAL 1 — AUTO-FAIL" xalign 0.5 bold True color "#cc4444" size 22
             elif result.passed:
-                text "✓  SUCCESS" xalign 0.5 bold True color "#44cc88" size 24
+                text "✓  SUCCESS" xalign 0.5 bold True color "#2e8b57" size 24
             else:
                 text "✗  FAILURE" xalign 0.5 bold True color "#cc4444" size 24
 
@@ -334,15 +339,15 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
         xsize 700
         ysize 580
         background None
-        padding (40, 30)
+        padding (40, 80)
 
         vbox:
             spacing 10
             xfill True
 
-            text "CHARACTER SHEET" xalign 0.5 bold True color "#c8a96e" size 26
+            text "CHARACTER SHEET" xalign 0.5 bold True color gui.accent_color size 26
             null height 4
-            text "Distribute your 6 free points (max +2 per attribute, cap 10)." xalign 0.5 color "#c8b89a" size 16
+            text "Distribute your 6 free points (max +2 per attribute, cap 10)." xalign 0.5 color gui.text_color size 16
             null height 8
 
             ## Pool indicator
@@ -363,8 +368,8 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
                     xfill True
                     spacing 8
 
-                    text attr_name color "#c8a96e" bold True size 20 xminimum 60
-                    text "[_final]" color "#f0e0c0" bold True size 20 xminimum 36 xalign 1.0
+                    text attr_name color gui.accent_color bold True size 20 xminimum 60
+                    text "[_final]" color gui.text_color bold True size 20 xminimum 36 xalign 1.0
 
                     textbutton "−":
                         xsize 30
@@ -381,20 +386,20 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
             ## Skills summary
             hbox:
                 xfill True
-                text "Skills: " color "#c8a96e" size 17 bold True
-                text (", ".join(skills.keys()) if skills else "—") color "#c8b89a" size 17
+                text "Skills: " color gui.accent_color size 17 bold True
+                text (", ".join(skills.keys()) if skills else "—") color gui.text_color size 17
 
             ## Traits summary
             if traits:
                 hbox:
                     xfill True
-                    text "Traits: " color "#c8a96e" size 17 bold True
+                    text "Traits: " color gui.accent_color size 17 bold True
                     $ _trait_names = ", ".join(t.replace("_", " ").title() for t in traits)
-                    text _trait_names color "#c8b89a" size 17
+                    text _trait_names color gui.text_color size 17
 
             ## Pending free-skill note
             if pending_free > 0:
-                text "[pending_free] free skill pick(s) — choose after confirming." color "#c8a96e" size 15
+                text "[pending_free] free skill pick(s) — choose after confirming." color gui.accent_color size 15
 
             null height 12
 

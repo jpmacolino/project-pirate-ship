@@ -5,19 +5,19 @@
 init python:
     gui.init(1280, 720)
 
-## ─── Colours ──────────────────────────────────────────────────────────────
+## ─── Colors ──────────────────────────────────────────────────────────────
 
-define gui.accent_color            = "#c8a96e"   ## warm gold
-define gui.idle_color              = "#c8b89a"   ## pale parchment text
-define gui.hover_color             = "#f0e0c0"   ## highlight
-define gui.selected_color          = "#f0e0c0"
+define gui.accent_color            = "#6e4a1e"   ## deep bronze — titles/prompts
+define gui.idle_color              = "#5a4632"   ## muted ink — button text at rest
+define gui.hover_color             = "#6e4a1e"   ## warms to bronze on hover (NOT lighter)
+define gui.selected_color          = "#6e4a1e"
 define gui.insensitive_color       = "#776655"
 define gui.muted_color             = "#886644"
 define gui.hover_muted_color       = "#aa8855"
 
 define gui.text_color              = "#2a1f14"   ## dark ink on light background
-define gui.interface_text_color    = "#c8b89a"
-define gui.name_text_color         = "#c8a96e"
+define gui.interface_text_color    = "#3a2a18"   ## dark — menu/interface text
+define gui.name_text_color         = "#6e4a1e"   ## bronze speaker name
 
 ## ─── Fonts ────────────────────────────────────────────────────────────────
 ## Using Ren'Py built-in fonts; a custom font can be added post-MVP.

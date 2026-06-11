@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/screens.rpy", line 123: 'xfill' is not a keyword argument or valid child of the add statement.
-    add FileScreenshot(slot) xfill True ysize 144
-                                  ^
+File "game/screens.rpy", line 277: expected a keyword argument, colon, or end of line.
+    text "  +  [result.skill] [result.skill_rank]" color gui.text_colorsize 20
+                                                                            ^
 
 Ren'Py Version: Ren'Py 8.5.3.26051504
-Wed Jun 10 13:15:21 2026
+Thu Jun 11 15:48:44 2026
