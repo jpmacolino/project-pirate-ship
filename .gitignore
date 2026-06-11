@@ -17,6 +17,11 @@ BLOCKED.md
 *.rpymc
 game/saves/
 game/cache/
+log.txt
+traceback.txt
+errors.txt
+*.rpyc
+saves/
 
 # OS / editor cruft
 .DS_Store

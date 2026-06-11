@@ -130,7 +130,6 @@ style choice_button_text:
     hover_color "#ffffff"
     size gui.text_size
     text_align 0.0
-    layout "tear"
 
 
 ## ─── Save / Load ────────────────────────────────────────────────────────────
