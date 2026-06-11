@@ -117,18 +117,6 @@ style button_text:
     font gui.interface_font
     size gui.interface_size
 
-style choice_button:
-    background Frame("#00000066", 5, 5)
-    hover_background Frame("#3d2b1a99", 5, 5)
-    xsize gui.choice_button_width
-    ysize gui.choice_button_height
-
-style choice_button_text is button_text:
-    xalign 0.5
-    yalign 0.5
-    color gui.idle_color
-    hover_color gui.hover_color
-
 style interface_label_text:
     color gui.accent_color
     bold True

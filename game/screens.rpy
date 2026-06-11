@@ -104,6 +104,35 @@ style game_menu_label_text is interface_label_text:
     color gui.accent_color
 
 
+## ─── Choices (menu) ──────────────────────────────────────────────────────────
+## Plain menu: blocks route here. Long captions wrap; each option is a distinct
+## dark card with light text, centered, that brightens on hover.
+
+screen choice(items):
+    style_prefix "choice"
+    vbox:
+        for i in items:
+            textbutton i.caption action i.action
+
+style choice_vbox:
+    xalign 0.5
+    yalign 0.5
+    spacing 14
+
+style choice_button:
+    xsize 1000
+    padding (30, 18)
+    background "#1c1208e0"
+    hover_background "#5a3a1af0"
+
+style choice_button_text:
+    color "#ece0c6"
+    hover_color "#ffffff"
+    size gui.text_size
+    text_align 0.0
+    layout "tear"
+
+
 ## ─── Save / Load ────────────────────────────────────────────────────────────
 
 screen save():
@@ -337,16 +366,14 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
         xalign 0.5
         yalign 0.5
         xsize 700
-        ysize 580
+        ysize 460
         background None
-        padding (40, 80)
+        padding (40, 36)
 
         vbox:
-            spacing 10
+            spacing 4
             xfill True
 
-            text "CHARACTER SHEET" xalign 0.5 bold True color gui.accent_color size 26
-            null height 4
             text "Distribute your 6 free points (max +2 per attribute, cap 10)." xalign 0.5 color gui.text_color size 16
             null height 8
 
