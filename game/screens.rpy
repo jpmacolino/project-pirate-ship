@@ -93,9 +93,22 @@ screen game_menu(title, scroll=None, yinitial=0.0):
     if main_menu:
         key "game_menu" action ShowMenu("main_menu")
 
-style game_menu_outer_frame is empty
-style game_menu_navigation_frame is empty
-style game_menu_content_frame is empty
+## CHANGED: the three frame styles below carried no geometry (`is empty`), so the
+## title piled onto the nav and the content area collapsed. They now reserve the
+## title band, give the nav a fixed column, and hand the rest to the content.
+style game_menu_outer_frame is empty:
+    xfill True
+    yfill True
+    top_padding 140
+    bottom_padding 40
+    left_padding 40
+    right_padding 40
+style game_menu_navigation_frame is empty:
+    xsize 280
+    yfill True
+style game_menu_content_frame is empty:
+    yfill True
+    left_margin 40
 style game_menu_label is interface_label:
     xpos 75
     ysize 126
@@ -133,31 +146,74 @@ style choice_button_text:
 
 
 ## ─── Save / Load ────────────────────────────────────────────────────────────
+## CHANGED: dropped scroll="vpgrid" — file_slots now paginates itself.
 
 screen save():
     tag menu
-    use game_menu(_("Save"), scroll="vpgrid"):
+    use game_menu(_("Save")):
         use file_slots(_("Save"))
 
 screen load():
     tag menu
-    use game_menu(_("Load"), scroll="vpgrid"):
+    use game_menu(_("Load")):
         use file_slots(_("Load"))
 
+## CHANGED: was a flat hbox of 12 buttons (one row, overflowing off-screen).
+## Now a 3×2 paged grid — dark cards with cream text, matching the choice cards,
+## since the slots sit on their own surface rather than on parchment.
 screen file_slots(title):
     default page_name_value = FilePageNameInputValue(pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"))
 
-    hbox:
-        for i in range(1, 13):
-            $ slot = i
-            button:
-                action FileAction(slot)
-                has vbox
-                add FileScreenshot(slot) ysize 144
-                text FileTime(slot, format=_("{#file_time}%A, %B %d %Y, %H:%M"), empty=_("empty slot")):
-                    size 16
-                text FileSaveName(slot):
-                    size 16
+    vbox:
+        xfill True
+        yfill True
+        spacing 10
+
+        button:
+            style "empty"
+            key_events True
+            xalign 0.5
+            action page_name_value.Toggle()
+            input:
+                value page_name_value
+                color gui.accent_color
+                size gui.text_size
+                xalign 0.5
+
+        grid 3 2:
+            xalign 0.5
+            spacing 14
+
+            for i in range(6):
+                $ slot = i + 1
+                button:
+                    xsize 260
+                    ysize 190
+                    padding (8, 8)
+                    background "#1c1208cc"
+                    hover_background "#5a3a1af0"
+                    action FileAction(slot)
+                    has vbox
+                    spacing 4
+                    add FileScreenshot(slot) xalign 0.5
+                    text FileTime(slot, format=_("{#file_time}%b %d, %Y  %H:%M"), empty=_("empty slot")):
+                        color "#ece0c6"
+                        size 14
+                        xalign 0.5
+                    text FileSaveName(slot):
+                        color "#ece0c6"
+                        size 14
+                        xalign 0.5
+                    key "save_delete" action FileDelete(slot)
+
+        hbox:
+            xalign 0.5
+            spacing 8
+            textbutton _("<") action FilePagePrevious()
+            textbutton _("{#auto_page}A") action FilePage("auto")
+            for page in range(1, 7):
+                textbutton "[page]" action FilePage(page)
+            textbutton _(">") action FilePageNext()
 
 
 ## ─── Preferences ────────────────────────────────────────────────────────────
