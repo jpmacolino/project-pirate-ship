@@ -339,6 +339,15 @@ screen dice_result(result):
             textbutton "Continue" xalign 0.5 action Return()
 
 
+style sheet_begin_text is button_text:
+    color "#f4e8c8"
+    hover_color "#ffffff"
+    insensitive_color "#8a7a60"
+    outlines [ (absolute(2), "#000000cc", absolute(0), absolute(0)) ]
+    size 32
+    bold True
+
+
 ## ─── CHARACTER SHEET CONFIRM (§5.2, §5.12) ───────────────────────────────────
 
 screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
@@ -372,13 +381,14 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
         vbox:
             spacing 4
             xfill True
+            null height 40
 
             text "Distribute your 6 free points (max +2 per attribute, cap 10)." xalign 0.5 color gui.text_color size 16
             null height 8
 
             ## Pool indicator
             $ _used = alloc_STR + alloc_DEX + alloc_INT + alloc_CHA + alloc_SPR + alloc_END
-            text "Points remaining: [6 - _used]" xalign 0.5 color ("#44cc88" if _used < 6 else "#cc4444") size 18
+            text "Points remaining: [6 - _used]" xalign 0.5 color ("#2e8b57" if _used == 6 else "#b06a1e") size 18
 
             null height 4
 
@@ -418,6 +428,7 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
             ## Traits summary
             if traits:
                 hbox:
+                    yoffset -8
                     xfill True
                     text "Traits: " color gui.accent_color size 17 bold True
                     $ _trait_names = ", ".join(t.replace("_", " ").title() for t in traits)
@@ -429,9 +440,12 @@ screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
 
             null height 12
 
-            textbutton "Begin Your Story":
-                xalign 0.5
-                action Return({
-                    "STR": alloc_STR, "DEX": alloc_DEX, "INT": alloc_INT,
-                    "CHA": alloc_CHA, "SPR": alloc_SPR, "END": alloc_END,
-                })
+    textbutton "Begin":
+        xalign 0.5
+        yalign 0.9
+        text_style "sheet_begin_text"
+        sensitive (alloc_STR + alloc_DEX + alloc_INT + alloc_CHA + alloc_SPR + alloc_END == 6)
+        action Return({
+            "STR": alloc_STR, "DEX": alloc_DEX, "INT": alloc_INT,
+            "CHA": alloc_CHA, "SPR": alloc_SPR, "END": alloc_END,
+        })
