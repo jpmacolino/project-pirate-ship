@@ -263,10 +263,52 @@ style notify_text is gui_text:
     size 16
 
 
-## ─── NPC dialogue (say screen) — uses gui.rpy styles automatically ───────────
+## ─── NPC dialogue (say screen) ───────────────────────────────────────────────
+## Explicit say screen. The gui.rpy styles (say_label, say_dialogue) only apply
+## if a say screen references them; without this, Ren'Py used a default that
+## ignored them — which is why the gui edits did nothing.
 
-## Ren'Py uses the built-in say screen.  We only override styles in gui.rpy.
-## No custom say screen needed; stock say screen works with the style overrides.
+screen say(who, what):
+    style_prefix "say"
+
+    window:
+        id "window"
+
+        if who is not None:
+            text who:
+                id "who"
+                style "say_label"
+                xpos gui.name_xpos
+                ypos gui.name_ypos
+
+        text what:
+            id "what"
+            style "say_dialogue"
+            xpos gui.dialogue_xpos
+            ypos gui.dialogue_ypos
+            xsize gui.dialogue_width
+
+    ## Side portrait if a speaker defines one (harmless if none).
+    if not renpy.variant("small"):
+        add SideImage() xalign 0.0 yalign 1.0
+
+
+## ─── Text input (name entry, §5.2) ───────────────────────────────────────────
+screen input(prompt):
+    window:
+        vbox:
+            xpos gui.dialogue_xpos
+            ypos gui.dialogue_ypos
+            xsize gui.dialogue_width
+            spacing 6
+            text prompt:
+                color gui.accent_color
+                bold True
+                size gui.text_size
+            input:
+                id "input"
+                color gui.text_color
+                size gui.text_size
 
 
 ## ─── DICE RESULT SCREEN (visible-tabletop, §5.10) ────────────────────────────

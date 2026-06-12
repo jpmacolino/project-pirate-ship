@@ -79,6 +79,18 @@
 ### 5.4 Chapter Arc
 1. ✅ **Beach** — wake, paced chargen, debris search.
 2. 🟡 **The road** — 1–2 beats (a choice + a skill check) that exercise the loop a second time under different conditions.
+- 🟡 **Road check carries a real outcome (no consequence-free visible roll).**
+    The road's skill check (Endurance, as authored) must diverge pass vs. fail in a
+    *mechanical / gating* way, not flavor only — a watched roll that changes nothing
+    trains the player that rolls don't matter, against the §1 visible-tabletop posture.
+    **MVP seam (no new scene):** the check sets a carry flag (steady vs. worn) consumed
+    at the camp threshold (§5.5) — pass arrives steady; fail lands a small disadvantage
+    or closes one minor beat in the lookout exchange. Reuses existing content; satisfies
+    §5.4's "exercise the loop a second time" and the §6 no-orphan-flags / outcome-
+    divergence checks. Build-side: narrative-writer authors the branch + flag; a
+    systems test asserts the flag has a consumer. (Strict-defer alternative, not chosen:
+    demote the road check to plain narration for MVP, restore the *rolled* beat in V1 —
+    forfeits the second loop, so rejected.)
 3. ✅ **First town gate** — arrival = MVP curtain.
 - 🟡 **Background continuity is carried by narration, not camera-matching.** The beach and
   road backgrounds are framed from different vantage points (wake shot looks seaward at the
@@ -269,6 +281,11 @@
   - (e) **DOD_GIVE_UP_N** (default 3) — confirm the Stop-hook give-up threshold.
   - (f) **Conventions the gate enforces** (asset folder layout, API names) are set up
     front — environment decisions, not build outputs.
+  - 📌 **7.14 Road→camp walk expansion (V1+).** MVP's road is one beat with its
+  consequence sunk into the threshold (§5.4 / §5.5). V1 expands the walk into a longer
+  trek with its own consequence surface — exposure / terrain / fatigue beats where the
+  Endurance outcome pays off locally rather than only downstream. Pure content growth on
+  the existing seam; no builder/API change. Seed, not throwaway.
 
 ## 8. Explicit Non-Goals (MVP)
 Full species roster · subclasses · free exploration of the opening area · explorable town hub · multiple chapters · romance/relationship systems · combat depth (pending 7.3).

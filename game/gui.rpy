@@ -39,11 +39,11 @@ define gui.textbox_height          = 185
 define gui.textbox_yalign          = 1.0
 
 define gui.name_xpos               = 310
-define gui.name_ypos               = 6
+define gui.name_ypos               = 44
 define gui.name_xalign             = 0.0
 
 define gui.dialogue_xpos           = 210
-define gui.dialogue_ypos           = 45
+define gui.dialogue_ypos           = 80
 define gui.dialogue_width          = 868
 
 ## ─── Dialogue / Say screen ────────────────────────────────────────────────
