@@ -9,7 +9,7 @@ label camp_threshold:
     "You step off the coastal path onto the camp's edge."
     "The sand here is packed and well-worn."
 
-    show lookout
+    show lookout at lookout_at_camp
     with dissolve
 
     "A figure has been watching you come up the coast from a raised wooden platform — a simple perch just above the dune line."

@@ -106,6 +106,16 @@
 ### 5.5 MVP Curtain — The Town Gate
 - 🟡 The gate hosts **one reactive NPC encounter** that pays off a creation flag (species / Erathal origin / ship-reason changes the exchange). This proves the chargen→consequence loop end to end.
 - 🟡 The town itself is **not built** for MVP — a threshold and one NPC, then "end of MVP." The town is a V1 problem.
+- 🟡 **Gate check carries a real outcome (welcome vs refusal).** The threshold
+  Diplomacy check must branch on pass/fail: **success → granted respite** (welcomed;
+  flag `camp_welcome = True`); **failure → refused respite**, turned away at the camp
+  edge (`camp_welcome = False`). This is the first place the *species flag alters the
+  outcome*, not just the adv/disadv label — a Hájje's gate disadvantage (§5.12) makes
+  refusal likelier, completing the §6 chargen→consequence payoff. **Fairness:**
+  disadvantage is a hill not a wall — a strong build/roll still earns welcome; refusal
+  is never species-predetermined. Both outcomes are MVP-curtain end beats; the flag
+  seeds V1's opening state (welcomed-in vs unwelcome-stranger). Build-side: CC authors
+  the two beats + flag; consumed by the §6 no-orphan-flags / outcome-divergence checks.
 
 ### 5.8 Narrative Spine (MVP) — settled structure
 - ✅ **The merfolk red herring.** The wreck *appears* to be merfolk work; it isn't. A hidden force (identity/motive TBD — see 7.1) is framing them.
@@ -264,7 +274,20 @@
   **Still open:** (b) full in-the-loop pipeline for later releases (unchanged).
 - 📌 **7.7 Skill set — bookmarked (revisit after MVP story is written).** Current list is intentionally light (early draft). Don't finalize MVP skills abstractly — derive them from the written content. Once the full slice exists, audit that (a) every skill the beats call on exists, and (b) every stat shown on the confirm screen earns at least one moment in the slice — no orphan/dormant stats (visible-tabletop fairness). Long-term: flesh out the general skill list for the whole game.
 - 📌 **7.8 Advantage/Disadvantage design — RESOLVED into §5.10.** (Trigger taxonomy, net-sign resolution, one-axis-per-source, labels.) Remaining growth (full rapport, deep trait tree) is V1+ content, not an open MVP question.
-- ❓ **7.9 Natural 20 / Natural 1 rule.** Does a nat 20 auto-succeed / nat 1 auto-fail (and/or carry a crit/fumble flavor beat)? Free design choice — confirmed not an IP issue (§5.11), and direction is conventional, not inherited. Matters more in a *visible-dice* game (a seen nat 20 should probably *mean* something). Interacts with tuning. Lean: embrace some crit/fumble feel; exact form TBD (auto-success only? bonus debris find on a nat 20 search? flavor only?).
+- ✅ **7.9 Natural 20 / Natural 1 — RESOLVED (ratified as shipped, + framing rider).**
+  Nat 20 = auto-success, nat 1 = auto-fail (both override the total).
+  **Why the reasoning is asymmetric:** nat-20 auto-success is the §1 safety valve — in a
+  no-GM, pre-authored-DC visible-dice game the best possible roll must never read as "still
+  not enough" (that *is* the unwinnable-by-design failure §1 fences off). Nat-1 auto-fail is
+  retained because the checks it can swing (§5.4 road, §5.5 gate) are authored survivable —
+  a fluke refusal seeds a recoverable V1 state, not a dead end — and a build-blind fluke does
+  not breach the §5.5 hill-not-a-wall cap, which forbids *species-predetermination*, not
+  *variance*.
+  **Rider (legibility, §5.10):** when a nat-1 overrides an otherwise-passing total, the
+  authored label/flavor must read as a freak slip, not a competence failure. Narrative-writer
+  constraint, not a kernel change.
+  **Crit *texture* (bonus finds, flavor beats) → V1** per §7.7 (derive from the written slice).
+  Kernel handling of nat-20/nat-1 lives in §5.9; CC implements.
 - 📌 **7.10 Per-NPC trait-interaction system — bookmarked (V1+).** General system: individual NPCs carry reactions keyed to player traits (sex, species, origin) — e.g. a chauvinist who dismisses a female PC, a xenophobe who distrusts outsiders. **MVP hardcodes one instance** (village anti-Hájje/outsider disposition, §5.12); **V1 generalizes** the hardcoded instance into the per-NPC system. MVP feature is the seed, not throwaway.
 - 📌 **7.11 Progression system — bookmarked (V1+).** Leveling, earned attribute/skill points, and class-restricted advancement. The open Fallout-SPECIAL-style allocation model (§5.12) is the *creation-time* half; this is the *growth* half. Deferred with combat (no leveling in a one-chapter slice).
 - 📌 **7.12 Adult-background → lifepath (V1+).** MVP's single background question (one trait, ~3 options — see §5.12 once confirmed) is the seed; V1 grows it into a richer "personal history as an adult" lifepath (more nodes/questions, richer trait grants) — pure data additions. Distinct from childhood *upbringing* (flavor).

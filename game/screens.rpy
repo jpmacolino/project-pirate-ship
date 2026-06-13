@@ -1,6 +1,11 @@
 ## Custom screens for Evorath (§5.2, §5.9, §5.10).
 ## Visible-tabletop aesthetic: dice, DC, adv/disadv labels shown on every check.
 
+transform lookout_at_camp:
+    zoom 0.8
+    xalign 0.5
+    yalign 1.0
+
 ## ─── Main Menu ──────────────────────────────────────────────────────────────
 
 screen main_menu():
@@ -111,10 +116,12 @@ style game_menu_content_frame is empty:
     left_margin 40
 style game_menu_label is interface_label:
     xpos 75
-    ysize 126
+    ypos 40
+    ysize 100
 style game_menu_label_text is interface_label_text:
     size gui.title_text_size
     color gui.accent_color
+    yalign 0.5
 
 
 ## ─── Choices (menu) ──────────────────────────────────────────────────────────
@@ -236,16 +243,18 @@ screen history():
     predict False
     use game_menu(_("History"), scroll="viewport", yinitial=1.0):
         style_prefix "history"
-        for h in renpy.iter_history():
+        for h in _history_list:
             window:
                 has fixed:
                     yfit True
                 if h.who:
                     label h.who style "history_name"
-                    $ what = h.what
-                    text what:
-                        substitute False
-                        xpos 220
+                $ what = h.what
+                text what:
+                    substitute False
+                    xpos 220
+        if not _history_list:
+            label _("The dialogue history is empty.")
 
 style history_window is empty:
     ysize gui.history_height
