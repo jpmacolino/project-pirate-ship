@@ -22,6 +22,7 @@ allocate_free_points(free_skills=[...]).
 from __future__ import annotations
 
 from .mechanics import (
+    ALL_SKILLS,
     ATTR_BASE, ATTR_CAP, ATTRIBUTES,
     FREE_POINT_POOL, FREE_POINT_MAX_PER_ATTR,
     SKILL_TRAINED, GameState, set_flag,
@@ -216,6 +217,17 @@ class CharacterBuilder:
             raise CreationError(
                 f"Need {self.pending_free_skills} free skill pick(s), got {len(fs)}"
             )
+        seen: set[str] = set()
+        for sk in fs:
+            if sk in self._granted_skills:
+                raise CreationError(
+                    f"Free skill pick {sk!r} duplicates a fixed grant"
+                )
+            if sk in seen:
+                raise CreationError(
+                    f"Free skill pick {sk!r} chosen more than once"
+                )
+            seen.add(sk)
         self._free_alloc = dict(allocations)
         self._free_skill_picks = list(fs)
         self._steps_done.add("free_points")
@@ -284,6 +296,19 @@ class CharacterBuilder:
             set_flag(state, flag)
 
         return state
+
+    # ------------------------------------------------------------------
+    # Query helpers (used by .rpy to build menus without touching internals)
+    # ------------------------------------------------------------------
+
+    def free_skill_options(self, already_chosen: list[str] | None = None) -> list[str]:
+        """Return skills available for a free pick.
+
+        Excludes skills already granted by species/class/origin and any skills
+        already selected in earlier picks this session.
+        """
+        excluded = set(self._granted_skills) | set(already_chosen or [])
+        return [s for s in ALL_SKILLS if s not in excluded]
 
     # ------------------------------------------------------------------
     # Internal helpers

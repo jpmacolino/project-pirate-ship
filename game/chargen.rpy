@@ -143,19 +143,34 @@ label chargen_start:
     $ _alloc = _return
 
     ## Free skill picks for overlap redirects (if any)
+    ## Loop runs pending_free_skills times; each pass filters out already-held skills.
+    python:
+        _free_skills = []
+        _fpick_n = 0
+
     if builder.pending_free_skills > 0:
-        "You've trained across more than one discipline. One more skill comes to mind."
-        menu:
-            "Diplomacy — the art of talk and negotiation.":
-                $ _free_skills = ["Diplomacy"]
-            "Endurance — stamina, hardiness, the long road.":
-                $ _free_skills = ["Endurance"]
-            "Athletics — strength, agility, physical mastery.":
-                $ _free_skills = ["Athletics"]
-            "Survival — living off the land, reading conditions.":
-                $ _free_skills = ["Survival"]
-    else:
-        $ _free_skills = []
+        "Your training spans more than one discipline — knowledge resurfaces in fragments."
+
+    label _free_skill_pick_loop:
+        if _fpick_n < builder.pending_free_skills:
+            $ _fp_available = builder.free_skill_options(_free_skills)
+            menu:
+                "Appraisal — reading value, markets, and goods." if "Appraisal" in _fp_available:
+                    $ _free_skills.append("Appraisal")
+                "Arcana — magical theory and sensitivity." if "Arcana" in _fp_available:
+                    $ _free_skills.append("Arcana")
+                "Athletics — strength, agility, physical mastery." if "Athletics" in _fp_available:
+                    $ _free_skills.append("Athletics")
+                "Diplomacy — the art of talk and negotiation." if "Diplomacy" in _fp_available:
+                    $ _free_skills.append("Diplomacy")
+                "Endurance — stamina, hardiness, the long road." if "Endurance" in _fp_available:
+                    $ _free_skills.append("Endurance")
+                "Seamanship — vessels, tides, maritime navigation." if "Seamanship" in _fp_available:
+                    $ _free_skills.append("Seamanship")
+                "Survival — living off the land, reading conditions." if "Survival" in _fp_available:
+                    $ _free_skills.append("Survival")
+            $ _fpick_n += 1
+            jump _free_skill_pick_loop
 
     ## Finalise character
     $ builder.allocate_free_points(_alloc, free_skills=_free_skills)

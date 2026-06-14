@@ -50,8 +50,11 @@ def _build_character(species, class_id, origin, background, sex, upbringing):
     b.set_origin(origin)
     b.set_background(background)
     b.set_flavor(sex, upbringing)
-    # Redirect any overlapping skill grants
-    free_skills = ["Diplomacy"] * b.pending_free_skills
+    # Redirect any overlapping skill grants — pick distinct available skills in order
+    free_skills: list[str] = []
+    for _ in range(b.pending_free_skills):
+        opts = b.free_skill_options(already_chosen=free_skills)
+        free_skills.append(opts[0])
     b.allocate_free_points({"STR": 1, "END": 1}, free_skills=free_skills)
     return b.build()
 

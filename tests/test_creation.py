@@ -2,7 +2,7 @@
 import pytest
 
 from systems.creation import CharacterBuilder, CreationError
-from systems.mechanics import ATTRIBUTES, ATTR_BASE, FREE_POINT_POOL, FREE_POINT_MAX_PER_ATTR
+from systems.mechanics import ALL_SKILLS, ATTRIBUTES, ATTR_BASE, FREE_POINT_POOL, FREE_POINT_MAX_PER_ATTR
 
 
 # ---------------------------------------------------------------------------
@@ -265,3 +265,115 @@ def test_all_backgrounds_reference_valid_traits():
     for bid, bg in BACKGROUNDS.items():
         tid = bg["trait_id"]
         assert tid in TRAITS, f"Background {bid!r} references unknown trait {tid!r}"
+
+
+# ---------------------------------------------------------------------------
+# Multi-slot free-pick (§5.12 redirect rule generics) — the fix target
+# ---------------------------------------------------------------------------
+
+def test_hajje_mage_immigrant_double_overlap():
+    """All three sources grant Arcana → pending_free_skills must be 2, not 1."""
+    b = CharacterBuilder()
+    b.set_species("hajje")      # Arcana
+    b.set_class("mage")         # Arcana → overlap 1
+    b.set_origin("immigrant")   # Arcana → overlap 2
+    assert b.pending_free_skills == 2
+
+
+def test_double_overlap_both_slots_fillable():
+    """With pending_free_skills==2 both picks apply and the final sheet has no dupes."""
+    b = CharacterBuilder()
+    b.set_species("hajje")
+    b.set_class("mage")
+    b.set_origin("immigrant")
+    b.set_background("scholarly")
+    b.set_flavor("she", "two_parents")
+    b.allocate_free_points({}, free_skills=["Diplomacy", "Endurance"])
+    state = b.build()
+    assert state.skills.get("Arcana") == 1
+    assert state.skills.get("Diplomacy") == 1
+    assert state.skills.get("Endurance") == 1
+    # no duplicates — every key is unique in a dict, so count == len of unique values
+    assert len(state.skills) == len(set(state.skills))
+
+
+def test_double_overlap_expected_total_skills():
+    """Hájje+Mage+Immigrant: 1 fixed grant (Arcana) + 2 free picks = 3 total skills."""
+    b = CharacterBuilder()
+    b.set_species("hajje")
+    b.set_class("mage")
+    b.set_origin("immigrant")
+    b.set_background("scholarly")
+    b.set_flavor("she", "two_parents")
+    b.allocate_free_points({}, free_skills=["Survival", "Athletics"])
+    state = b.build()
+    assert len(state.skills) == 3
+
+
+def test_free_skill_cannot_duplicate_fixed_grant():
+    """Picking a skill already granted by species/class/origin must raise."""
+    b = CharacterBuilder()
+    b.set_species("hajje")      # Arcana
+    b.set_class("mage")         # Arcana → overlap → pending=1
+    b.set_origin("crewmate")    # Seamanship
+    b.set_background("scholarly")
+    b.set_flavor("she", "two_parents")
+    with pytest.raises(CreationError, match="duplicates a fixed grant"):
+        b.allocate_free_points({}, free_skills=["Arcana"])
+
+
+def test_free_skill_cannot_pick_same_skill_twice():
+    """Two picks of the same free skill must raise even if that skill isn't a fixed grant."""
+    b = CharacterBuilder()
+    b.set_species("hajje")
+    b.set_class("mage")
+    b.set_origin("immigrant")   # pending_free_skills = 2
+    b.set_background("scholarly")
+    b.set_flavor("she", "two_parents")
+    with pytest.raises(CreationError, match="chosen more than once"):
+        b.allocate_free_points({}, free_skills=["Diplomacy", "Diplomacy"])
+
+
+def test_free_skill_options_excludes_granted_and_prior_picks():
+    """free_skill_options filters out fixed grants AND any skills already chosen."""
+    b = CharacterBuilder()
+    b.set_species("hajje")      # Arcana
+    b.set_class("mage")         # Arcana overlap
+    b.set_origin("crewmate")    # Seamanship
+    options_first = b.free_skill_options()
+    assert "Arcana" not in options_first
+    assert "Seamanship" not in options_first
+    assert "Diplomacy" in options_first
+
+    # Simulate having already chosen Diplomacy on the first pick
+    options_second = b.free_skill_options(already_chosen=["Diplomacy"])
+    assert "Arcana" not in options_second
+    assert "Seamanship" not in options_second
+    assert "Diplomacy" not in options_second   # excluded because already chosen
+    assert "Endurance" in options_second
+
+
+def test_free_skill_options_all_skills_in_pool():
+    """free_skill_options returns a subset of ALL_SKILLS."""
+    b = CharacterBuilder()
+    b.set_species("elf")
+    b.set_class("warrior")
+    b.set_origin("merchant")
+    for sk in b.free_skill_options():
+        assert sk in ALL_SKILLS
+
+
+def test_non_overlapping_combo_no_free_picks_needed():
+    """Elf+Warrior+Merchant: no overlaps → pending_free_skills==0, empty free list OK."""
+    b = CharacterBuilder()
+    b.set_species("elf")        # Survival
+    b.set_class("warrior")      # Athletics
+    b.set_origin("merchant")    # Appraisal
+    assert b.pending_free_skills == 0
+    b.set_background("sea_life")
+    b.set_flavor("she", "two_parents")
+    b.allocate_free_points({})  # no free_skills argument
+    state = b.build()
+    assert state.skills.get("Survival") == 1
+    assert state.skills.get("Athletics") == 1
+    assert state.skills.get("Appraisal") == 1

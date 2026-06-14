@@ -30,6 +30,18 @@ ATTR_CAP = 10
 SKILL_UNTRAINED = 0
 SKILL_TRAINED = 1
 
+# Exhaustive MVP skill list (§5.12 creation data; §7.7 names+counts still open but these
+# are the skills that exist in the current data — update here if data ever changes)
+ALL_SKILLS = (
+    "Appraisal",
+    "Arcana",
+    "Athletics",
+    "Diplomacy",
+    "Endurance",
+    "Seamanship",
+    "Survival",
+)
+
 # DC bands (§5.9)
 DC_EASY = 8
 DC_MODERATE = 12
