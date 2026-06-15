@@ -13,8 +13,10 @@ label chargen_start:
     "You reach for a shard of mirror-bright hull plating half-buried in the sand."
     "In it, something looks back. Your hands."
 
-    ## Collect species identity; set_species() is called after the flexibility
-    ## step below (driven by choose_* sentinels in species data, not by name).
+    ## Collect species identity. Fixed species (no choose_* sentinels) call
+    ## set_species() immediately; species with choose_* sentinels defer to
+    ## just before the confirm screen so the flexibility step feels like
+    ## part of that weighted resolution moment.
     $ _species_id = None
     menu:
         "Long-fingered, with the faint luminance of elven skin. Your hair has come loose — pale gold or silver in the dawn light.":
@@ -32,17 +34,9 @@ label chargen_start:
             "Hájje. You have spent years learning what that means to people who don't know you."
             "Their fear is old, and inherited, and not yours to carry — but you carry it anyway."
 
-    ## Flexibility step — driven by choose_* sentinels in species data.
-    ## Species with fixed bumps/grants skip straight to set_species().
+    ## Check sentinels now so the deferred branch below can reuse the result.
     $ _species_needs = CharacterBuilder.species_choice_needs(_species_id)
-    if _species_needs["needs_attr_choice"] or _species_needs["needs_skill_choice"]:
-        call screen species_flexibility(
-            CharacterBuilder.all_attributes(),
-            CharacterBuilder.all_skills()
-        )
-        $ _flex = _return
-        $ builder.set_species(_species_id, attr_choices=_flex["attrs"], skill_choice=_flex["skill"])
-    else:
+    if not (_species_needs["needs_attr_choice"] or _species_needs["needs_skill_choice"]):
         $ builder.set_species(_species_id)
 
     ## ── Fragment 2: SEX ────────────────────────────────────────────────────────
@@ -142,6 +136,16 @@ label chargen_start:
 
     "Everything coheres — slowly, like a face emerging from dark water."
     "Who you are. What you know. How you got here."
+
+    ## Flexibility step: deferred from Fragment 1 for species with choose_* sentinels.
+    ## Positioned here so it reads as part of the same weighted resolution moment.
+    if _species_needs["needs_attr_choice"] or _species_needs["needs_skill_choice"]:
+        call screen species_flexibility(
+            CharacterBuilder.all_attributes(),
+            CharacterBuilder.all_skills()
+        )
+        $ _flex = _return
+        $ builder.set_species(_species_id, attr_choices=_flex["attrs"], skill_choice=_flex["skill"])
 
     $ _pre = builder.preview()
     call screen charsheet_confirm(
