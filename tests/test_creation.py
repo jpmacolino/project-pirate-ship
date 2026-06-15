@@ -377,3 +377,96 @@ def test_non_overlapping_combo_no_free_picks_needed():
     assert state.skills.get("Survival") == 1
     assert state.skills.get("Athletics") == 1
     assert state.skills.get("Appraisal") == 1
+
+
+# ---------------------------------------------------------------------------
+# §7.13(b) invariant: player receives every choice the data promises
+# ---------------------------------------------------------------------------
+
+def test_species_choice_needs_human():
+    """Human must report both attr and skill choices required."""
+    needs = CharacterBuilder.species_choice_needs("human")
+    assert needs["needs_attr_choice"] is True
+    assert needs["needs_skill_choice"] is True
+
+
+def test_species_choice_needs_fixed_species():
+    """Fixed species (elf, hajje) must report no choices required."""
+    for sid in ("elf", "hajje"):
+        needs = CharacterBuilder.species_choice_needs(sid)
+        assert needs["needs_attr_choice"] is False, sid
+        assert needs["needs_skill_choice"] is False, sid
+
+
+def test_species_choice_needs_matches_data_sentinels():
+    """Choice-needs must be driven by choose_* sentinels in species data, not species name."""
+    from data.species import SPECIES
+    for sid, spec in SPECIES.items():
+        needs = CharacterBuilder.species_choice_needs(sid)
+        assert needs["needs_attr_choice"] == (spec["attr_bumps"] == "choose_two"), sid
+        assert needs["needs_skill_choice"] == (spec["skill_grants"] == "choose_one"), sid
+
+
+def test_human_set_species_raises_without_attr_choices():
+    """Missing attr_choices for human must raise immediately — no silent default."""
+    b = CharacterBuilder()
+    with pytest.raises(CreationError):
+        b.set_species("human")
+
+
+def test_human_set_species_raises_without_skill_choice():
+    """Missing skill_choice for human must raise immediately — no silent default."""
+    b = CharacterBuilder()
+    with pytest.raises(CreationError, match="skill_choice"):
+        b.set_species("human", attr_choices=["STR", "DEX"])
+
+
+def test_human_set_species_rejects_duplicate_attrs():
+    """Human cannot pick the same attribute twice."""
+    b = CharacterBuilder()
+    with pytest.raises(CreationError, match="distinct"):
+        b.set_species("human", attr_choices=["STR", "STR"], skill_choice="Diplomacy")
+
+
+def test_human_both_attr_choices_applied():
+    """Both human attr picks get +1 on the final sheet."""
+    b = CharacterBuilder()
+    b.set_species("human", attr_choices=["INT", "CHA"], skill_choice="Seamanship")
+    b.set_class("mage")        # SPR+1, Arcana
+    b.set_origin("merchant")   # Appraisal
+    b.set_background("hard_years")
+    b.set_flavor("she", "two_parents")
+    b.allocate_free_points({})
+    state = b.build()
+    assert state.attributes["INT"] == ATTR_BASE + 1, "first attr choice not applied"
+    assert state.attributes["CHA"] == ATTR_BASE + 1, "second attr choice not applied"
+    # Sanity: mage's own bump (SPR) is untouched by human picks
+    assert state.attributes["SPR"] == ATTR_BASE + 1
+
+
+def test_human_skill_choice_granted_directly():
+    """Non-overlapping human skill choice must appear in final skills."""
+    b = CharacterBuilder()
+    b.set_species("human", attr_choices=["STR", "DEX"], skill_choice="Diplomacy")
+    b.set_class("warrior")     # Athletics, STR
+    b.set_origin("merchant")   # Appraisal
+    b.set_background("sea_life")
+    b.set_flavor("he", "two_parents")
+    b.allocate_free_points({})
+    state = b.build()
+    assert state.skills.get("Diplomacy") == 1, "non-overlapping skill choice silently dropped"
+
+
+def test_human_skill_choice_overlap_redirects_not_drops():
+    """Overlapping human skill choice must redirect (pending +1) — not silently drop."""
+    b = CharacterBuilder()
+    b.set_species("human", attr_choices=["STR", "END"], skill_choice="Athletics")
+    b.set_class("warrior")     # Athletics → overlap with human's skill_choice
+    assert b.pending_free_skills == 1, "skill choice overlap was silently dropped instead of redirected"
+    b.set_origin("merchant")   # Appraisal
+    b.set_background("hard_years")
+    b.set_flavor("she", "two_parents")
+    b.allocate_free_points({}, free_skills=["Diplomacy"])
+    state = b.build()
+    assert state.skills.get("Athletics") == 1   # still present (from first grant)
+    assert state.skills.get("Diplomacy") == 1   # redirect pick applied

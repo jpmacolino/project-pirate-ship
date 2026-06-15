@@ -83,6 +83,8 @@ class CharacterBuilder:
         if bumps == "choose_two":
             if not attr_choices or len(attr_choices) != 2:
                 raise CreationError("Human species requires exactly 2 attr_choices")
+            if attr_choices[0] == attr_choices[1]:
+                raise CreationError("Human species attr_choices must be two distinct attributes")
             for a in attr_choices:
                 if a not in ATTRIBUTES:
                     raise CreationError(f"Unknown attribute: {a!r}")
@@ -309,6 +311,33 @@ class CharacterBuilder:
         """
         excluded = set(self._granted_skills) | set(already_chosen or [])
         return [s for s in ALL_SKILLS if s not in excluded]
+
+    @staticmethod
+    def species_choice_needs(species_id: str) -> dict:
+        """What flexibility choices this species requires, driven by choose_* sentinels.
+
+        Returns {"needs_attr_choice": bool, "needs_skill_choice": bool}.
+        Called by narrative to determine whether to show the flexibility step;
+        the sentinel values in species data, not the species name, drive the result.
+        """
+        from game.data.species import SPECIES
+        spec = SPECIES.get(species_id)
+        if spec is None:
+            raise CreationError(f"Unknown species: {species_id!r}")
+        return {
+            "needs_attr_choice": spec["attr_bumps"] == "choose_two",
+            "needs_skill_choice": spec["skill_grants"] == "choose_one",
+        }
+
+    @staticmethod
+    def all_attributes() -> list[str]:
+        """All valid attribute names, for populating choice UIs."""
+        return list(ATTRIBUTES)
+
+    @staticmethod
+    def all_skills() -> list[str]:
+        """All valid skill names, for populating choice UIs."""
+        return list(ALL_SKILLS)
 
     # ------------------------------------------------------------------
     # Internal helpers
