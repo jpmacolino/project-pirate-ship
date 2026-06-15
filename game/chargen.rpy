@@ -13,30 +13,37 @@ label chargen_start:
     "You reach for a shard of mirror-bright hull plating half-buried in the sand."
     "In it, something looks back. Your hands."
 
+    ## Collect species identity; set_species() is called after the flexibility
+    ## step below (driven by choose_* sentinels in species data, not by name).
+    $ _species_id = None
     menu:
         "Long-fingered, with the faint luminance of elven skin. Your hair has come loose — pale gold or silver in the dawn light.":
-            $ builder.set_species("elf")
+            $ _species_id = "elf"
             "An elf. Thalvath-born, or so the feeling says."
             "That much comes back quickly."
 
         "Broad, weathered — a human's hands. Calloused from work you almost remember.":
+            $ _species_id = "human"
             "Human hands. Practical. Nothing especially remarkable about them."
-            "Three things rise from the fog before anything else:"
-            menu:
-                "Your body — speed, strength, the sea. You've always known ships.":
-                    $ builder.set_species("human", attr_choices=["STR", "DEX"], skill_choice="Seamanship")
-                    "A sailor's build, a sailor's hands. That much you know."
-                "Your eye — prices, weight, the art of a deal. You read a room fast.":
-                    $ builder.set_species("human", attr_choices=["INT", "CHA"], skill_choice="Appraisal")
-                    "A merchant's instincts, always measuring."
-                "Your mind — books, theory, the patterns behind things.":
-                    $ builder.set_species("human", attr_choices=["SPR", "INT"], skill_choice="Arcana")
-                    "A scholar's habits. You can't look at anything without wanting to understand it."
+            "What you're made of comes back in pieces — not as a single thing, but as choices."
 
         "Dark-veined at the knuckles. Unnervingly still. Pale skin; black hair matted with seawater.":
-            $ builder.set_species("hajje")
+            $ _species_id = "hajje"
             "Hájje. You have spent years learning what that means to people who don't know you."
             "Their fear is old, and inherited, and not yours to carry — but you carry it anyway."
+
+    ## Flexibility step — driven by choose_* sentinels in species data.
+    ## Species with fixed bumps/grants skip straight to set_species().
+    $ _species_needs = CharacterBuilder.species_choice_needs(_species_id)
+    if _species_needs["needs_attr_choice"] or _species_needs["needs_skill_choice"]:
+        call screen species_flexibility(
+            CharacterBuilder.all_attributes(),
+            CharacterBuilder.all_skills()
+        )
+        $ _flex = _return
+        $ builder.set_species(_species_id, attr_choices=_flex["attrs"], skill_choice=_flex["skill"])
+    else:
+        $ builder.set_species(_species_id)
 
     ## ── Fragment 2: SEX ────────────────────────────────────────────────────────
 

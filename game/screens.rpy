@@ -455,6 +455,109 @@ style sheet_begin_text is button_text:
     bold True
 
 
+## ─── SPECIES FLEXIBILITY (§5.12 choose_* sentinels) ─────────────────────────
+## Shown before charsheet_confirm for species with choose_* data sentinels.
+## Workhorse frame: sheet_frame.png is reserved for charsheet_confirm (§5.7).
+## Returns {"attrs": [attr1, attr2], "skill": skill_name}.
+
+screen species_flexibility(available_attrs, available_skills):
+    modal True
+    add Solid("#000000cc")
+
+    default pick_attr1 = None
+    default pick_attr2 = None
+    default pick_skill = None
+
+    frame:
+        xalign 0.5
+        yalign 0.5
+        xsize 700
+        background "#1c1208e0"
+        padding (40, 32)
+
+        vbox:
+            spacing 12
+            xfill True
+
+            text "Two attributes that define you (+1 each):" xalign 0.5 color gui.accent_color bold True size 18
+            null height 2
+
+            hbox:
+                xalign 0.5
+                spacing 8
+                for attr in available_attrs:
+                    $ _a_sel  = (attr == pick_attr1 or attr == pick_attr2)
+                    $ _a_open = (_a_sel or pick_attr1 is None or pick_attr2 is None)
+                    textbutton attr:
+                        style "flexibility_attr_button"
+                        selected _a_sel
+                        sensitive _a_open
+                        action If(
+                            attr == pick_attr1 or attr == pick_attr2,
+                            If(attr == pick_attr1,
+                                SetScreenVariable("pick_attr1", None),
+                                SetScreenVariable("pick_attr2", None)),
+                            If(pick_attr1 is None,
+                                SetScreenVariable("pick_attr1", attr),
+                                SetScreenVariable("pick_attr2", attr))
+                        )
+
+            null height 8
+
+            text "One skill you carry:" xalign 0.5 color gui.accent_color bold True size 18
+            null height 2
+
+            hbox:
+                xalign 0.5
+                spacing 6
+                for skill in available_skills:
+                    textbutton skill:
+                        style "flexibility_skill_button"
+                        selected (skill == pick_skill)
+                        action SetScreenVariable("pick_skill", skill)
+
+            null height 20
+
+            $ _flex_ready = (pick_attr1 is not None and pick_attr2 is not None and pick_skill is not None)
+            textbutton "Confirm":
+                xalign 0.5
+                text_style "sheet_begin_text"
+                sensitive _flex_ready
+                action Return({"attrs": [pick_attr1, pick_attr2], "skill": pick_skill})
+
+
+style flexibility_attr_button:
+    xsize 90
+    padding (8, 10)
+    background "#2a1a08cc"
+    hover_background "#5a3a1af0"
+    selected_background "#5a3a1af0"
+    insensitive_background "#1a0e04aa"
+
+style flexibility_attr_button_text:
+    color "#ece0c6"
+    hover_color "#ffffff"
+    selected_color "#ffffff"
+    insensitive_color "#4a3a20"
+    size 18
+    bold True
+    xalign 0.5
+
+style flexibility_skill_button:
+    xsize 86
+    padding (6, 8)
+    background "#2a1a08cc"
+    hover_background "#5a3a1af0"
+    selected_background "#5a3a1af0"
+
+style flexibility_skill_button_text:
+    color "#ece0c6"
+    hover_color "#ffffff"
+    selected_color "#ffffff"
+    size 14
+    xalign 0.5
+
+
 ## ─── CHARACTER SHEET CONFIRM (§5.2, §5.12) ───────────────────────────────────
 
 screen charsheet_confirm(pre_attrs, skills, traits, pending_free):
