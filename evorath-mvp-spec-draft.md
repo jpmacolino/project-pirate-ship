@@ -5,15 +5,19 @@
 > This is the MVP scope only. The world bible and later releases (V1+) are tracked separately. Nothing here is final; it's the living contract for the first autonomous release.
 
 > **── HANDOFF / CURRENT STATE ──**
-> **Settled (add):** lookout NPC sprite locked (generation-6173 → game/images/sprites/lookout.png);
->   sprite asset convention set (§5.7). MVP NPC-sprite count resolved to one — base figure only,
->   reactive payoff via dialogue/labels, expression variants → V1.
-> **Settled (add):** GUI art lane complete — every skinned `game/gui/` slot locked (§5.7):
->   textbox, frame (workhorse 9-slice), sheet_frame (set piece), game_menu, main_menu (=
->   bg_coast_path copy), window_icon + evorath_mark (from the canonical favicon). Two-frame split recorded.
-> **Next up:** hand the spec to Claude Code for the autonomous MVP build (§2 + §9 cage).
-> **Open before/at build (environment, non-blocking):** §9.8 gate-invokes-venv-python-by-path (🟡);
->   §9.9 lore-reviewer preload (🟡).
+> **V1 design underway.** Settled this session: §5.9 attribute→bonus (`ceil/2`, cap +5)
+>   and three skill tiers (Skilled/Adept/Masterful, +2/+4/+6); §7.11 progression
+>   (27→37, even-level +1 attr, level cap 20, horizontal-only beyond); §7.15 inventory
+>   model; §7.7 MVP DCs validated.
+> **V1 build-prompt queue (Claude Code — not done piecemeal):** align `resolve_check`
+>   full-value → `ceil/2`; replace binary skills with the three tiers; implement leveling +
+>   level cap 20 + character sheet; build the inventory/encumbrance system + UI;
+>   (INT/CHA secondary — design first, then implement).
+> **Next chat:** endurance + diplomacy checks → real consequences (worn-state → gate
+>   consumption; gate outcome payoff); pairs with wreck-supply detailing and the §7.14
+>   road expansion.
+> **Deferred:** INT/CHA non-combat secondary (design pass); exact inventory base + item
+>   weights/bundle_sizes (systems pass); residual gate nat-20-under-disadvantage check.
 ---
 
 ## 1. Vision & Staging
@@ -198,6 +202,15 @@
 - ✅ **Class as lens (works without combat):** the off-note that doesn't fit merfolk is reachable by any class via a thorough Investigation check; a **Mage** additionally senses the arcane signature (SPR + Arcana), a **Warrior** reads the impact pattern no sea-creature leaves (martial eye). Same buried truth, different lens — class matters, mystery deepens, the 6 paths play differently. (No class locked out of the core clue — satisfies the 6-path DoD.)
 - 🟡 **Skills (provisional, see 7.7):** Investigation (INT), Athletics (STR), Diplomacy (CHA), Arcana (SPR), Endurance/Survival (END). Reconcile against the written story.
 - ✅ **Creation → sheet:** attributes base 1 → species + class bumps → diegetic story answers pre-weight (mappings TBD, 7.5) → confirm screen reveals the sheet + free points to tune (6 pts, max +2 to one, cap 10). Narrative facts locked; numbers adjustable.
+### 5.9 (amend "Creation → sheet")
+- …confirm screen reveals the sheet + free points to tune (6 pts, max +2 to one, cap 10).
+  **Human inserts a pre-confirm flexibility step (2 attrs + 1 skill) ahead of this shared
+  screen — see §5.12.** Narrative facts locked; numbers adjustable.
+  - ✅ **Attribute → check bonus = `ceil(attribute / 2)`, capped at +5.** So +1 at 1–2, +2 at 3–4, +3 at 5–6, +4 at 7–8, +5 at 9–10. This is the compression that bridges the raw-add tabletop canon to the game's +11 ceiling; without it, full-attribute totals balloon and advantage stops doing the lifting (§1 DC-20 anchor).
+  - ⚠️ **Build reconciliation (V1 prompt):** current `resolve_check` adds the *full* attribute value. The V1 build must change it to `ceil(attribute/2)`, cap +5. The validated MVP DCs (§7.7) already assume the halved bands.
+- ✅ **Skill bonus = three trained tiers: Skilled +2 · Adept +4 · Masterful +6** (untrained = 0; cap +6). Names are adjectival quality descriptors — rating what the character *is*, not a credential — chosen to read across martial, social, and arcane skills alike.
+  - ⚠️ **Build reconciliation (V1 prompt):** current skills are single-rank (+1 trained / 0 untrained). The V1 build replaces this with the three-tier model.
+- ✅ **Ceiling unchanged: +11 = +5 (attribute) + +6 (skill).** Advantage/disadvantage stays a non-linear swing layered on top, never folded into the bonus.
 
 ### 5.10 Advantage / Disadvantage Model (MVP)
 - ✅ **Mechanic (from system bible):** Advantage = roll 2d20, take the **higher**; Disadvantage = roll 2d20, take the **lower**. Binary state — there is **no 3d20+**. Advantage is a switch (on / off / inverted), never a stacking dice resource.
@@ -233,6 +246,28 @@
   (The `lore-reviewer` reads the bible; see §9.2.)
 - ✅ **Content guardrail (Hájje heritage):** the origin involves sexual violence — a theme an unsupervised agent must NOT expand or depict. The agent may reference the Hájje's feared/tragic heritage *in the abstract*; it must never generate graphic depictions, and the theme stays deep background unless deliberately authored forward. Enforce via the lore/content-validation layer, not a prompt.
 - ✅ **MVP attribute allocation (direction set; math provisional):** lean *open* (Fallout-SPECIAL-style) — small fixed racial bumps + the bulk free-assigned at the confirm screen. Leveling / earned attributes / class restrictions are progression (see 7.11), deferred. Exact bases & pool sizes → focused systems pass.
+### 5.12 (add)
+- ✅ **Human flexibility delivered as a pre-confirm step, never a default.** Human's
+  "choose any two attributes / choose one skill" (§5.1/§5.12) surfaces as a dedicated,
+  **human-only** flexibility screen shown *before* the common confirm-and-tune screen
+  all species reach. The player picks **2 distinct attributes (+1 each)** and **1 skill**,
+  then proceeds; the human lands on the standard confirm screen at the shared 21-start +
+  6-free parity, racial picks baked in. Rationale (§1): a choice implemented as a hidden
+  default is not flexibility — it's a fixed build wearing a flexible label; the human's
+  openness must read as a visible, discrete act. The humans-only asymmetry is thematic
+  (the self-made people), not a wart, and sits *inside* the explicitly-mechanical confirm
+  sequence — so it does not breach §5.2's no-menu-wall (which governs the upstream
+  diegetic framing, not the confirm screen §5.2 itself sanctions).
+- ✅ **The data sentinel drives the step (root-cause fix).** The step triggers off the
+  species-data choose-markers (`attr_bumps`/`skill_grants` = choose_*), **not** a
+  hardcoded species name — keeping the builder data-driven (§4). Humans are the only
+  species carrying these markers for MVP and will remain so (confirmed), so no general
+  N-choice framework is built; but the marker must *drive the choice*, never fall through
+  to a silent default in the apply path (the bug this resolves). Presentation: reuse the
+  confirm-screen template with a constrained allocation rule (+1 to two distinct
+  attributes, +1 one skill, no free pool); §5.7's "sheet_frame appears once" holds — treat
+  the two screens as one continuous weighted moment, or wear the workhorse `frame.png` on
+  the step if reusing the set piece reads as dilution.
 
 ## 6. Definition of Done (machine-checkable)
 - ✅ `pytest` green and `renpy lint` clean.
@@ -273,6 +308,9 @@
   downstream character/token consistency (the fix for prompt-only failure on novel creatures).
   **Still open:** (b) full in-the-loop pipeline for later releases (unchanged).
 - 📌 **7.7 Skill set — bookmarked (revisit after MVP story is written).** Current list is intentionally light (early draft). Don't finalize MVP skills abstractly — derive them from the written content. Once the full slice exists, audit that (a) every skill the beats call on exists, and (b) every stat shown on the confirm screen earns at least one moment in the slice — no orphan/dormant stats (visible-tabletop fairness). Long-term: flesh out the general skill list for the whole game.
+- ✅ **MVP DC first-act pass — done.** Authored checks: beach Investigation (DC 10 basic / 14 thorough, INT), road Endurance (DC 10, END), gate Diplomacy (DC 12, CHA). All validated: scaled to level-1 bonuses (the die dominates, correct for act one), mapped to the difficulty bands, and none is a hard progress-gate (all branch on outcome) — so none can be unwinnable-by-design (§1).
+- ✅ **Gate "hill not a wall" — access half resolved:** Diplomacy is a selectable creation skill on both Mage and Warrior paths, so a disadvantaged Hájje can choose it to climb the hill. Refusal is never species-predetermined.
+- 🟡 **Residual gate verification:** confirm how `resolve_check` computes a nat-20 under disadvantage — if it keys off the taken (lower) die, the §7.9 auto-success valve is suppressed there. → §6 / §7.9 kernel audit.
 - 📌 **7.8 Advantage/Disadvantage design — RESOLVED into §5.10.** (Trigger taxonomy, net-sign resolution, one-axis-per-source, labels.) Remaining growth (full rapport, deep trait tree) is V1+ content, not an open MVP question.
 - ✅ **7.9 Natural 20 / Natural 1 — RESOLVED (ratified as shipped, + framing rider).**
   Nat 20 = auto-success, nat 1 = auto-fail (both override the total).
@@ -290,6 +328,11 @@
   Kernel handling of nat-20/nat-1 lives in §5.9; CC implements.
 - 📌 **7.10 Per-NPC trait-interaction system — bookmarked (V1+).** General system: individual NPCs carry reactions keyed to player traits (sex, species, origin) — e.g. a chauvinist who dismisses a female PC, a xenophobe who distrusts outsiders. **MVP hardcodes one instance** (village anti-Hájje/outsider disposition, §5.12); **V1 generalizes** the hardcoded instance into the per-NPC system. MVP feature is the seed, not throwaway.
 - 📌 **7.11 Progression system — bookmarked (V1+).** Leveling, earned attribute/skill points, and class-restricted advancement. The open Fallout-SPECIAL-style allocation model (§5.12) is the *creation-time* half; this is the *growth* half. Deferred with combat (no leveling in a one-chapter slice).
+- ✅ **Creation budget:** 27 attribute points (verified across all three races + Warrior: 21 base-plus-grants + 6 free, capped +2 to any one stat at creation).
+- ✅ **Growth:** +1 attribute on each even level → 10 increments across levels 2–20 → **37 at the level cap.** Skills advance roughly every other level (Skilled → Adept → Masterful).
+- ✅ **Level cap = 20. No levels beyond.** The +11 ceiling and the 27→37 budget are solved against a level-20 endgame; extending forces either breaking the +5/+11 caps or granting hollow levels. "More game" past 20 is *horizontal* — Momentum, traits, gear — never more vertical levels. The canon overflow rule (excess attribute points → Momentum at max) is the seed of this.
+- 📌 **INT/CHA "reach-10" incentive — design pending (open V1 thread).** No combat secondary by canon design, so their 9→10 step is flat for checks. Intended lever is a *non-combat* secondary (e.g. INT → skill/known-ability capacity; CHA → Momentum/rapport), to be designed before the V1 prompt locks.
+- ✅ **Build (V1 prompt):** leveling system, level cap, and the viewable character sheet are V1 build work.
 - 📌 **7.12 Adult-background → lifepath (V1+).** MVP's single background question (one trait, ~3 options — see §5.12 once confirmed) is the seed; V1 grows it into a richer "personal history as an adult" lifepath (more nodes/questions, richer trait grants) — pure data additions. Distinct from childhood *upbringing* (flavor).
 - 📌 **7.13 Build-environment firm-ups — bookmarked.** Guardrail layer (subagents,
   hooks, the human-owned DoD gate via run_dod.py) is designed; these reconcile later:
@@ -309,6 +352,17 @@
   trek with its own consequence surface — exposure / terrain / fatigue beats where the
   Endurance outcome pays off locally rather than only downstream. Pure content growth on
   the existing seam; no builder/API change. Seed, not throwaway.
+  ## 7.15 Inventory & Encumbrance (V1)
+- ✅ **New V1 system (MVP has none).** Extends the §4 item API (`add_item` / `has_item`) with capacity-aware adds and per-item weight data. Logic in the pure-Python systems layer; inventory + character-sheet screens are Ren'Py UI.
+- ✅ **Capacity = `base + (STR × 5) + racial_modifier`.** Per-STR value (5) locked; **base tentative 15 (possibly 20)** — the one dial confirmed against the authored gear list in the systems pass. STR pays twice: on physical-feat rolls *and* on what can be hauled.
+- ✅ **Racial modifier is signed and flat-additive** (matches the ruleset's existing flat racial bonuses to derived stats). Human / Elf / Hájje = 0. Smaller frames negative (e.g. satyr), larger positive (e.g. centaur) — pure data when those races are added; not designed now. **Floor invariant:** capacity ≥ a sane floor for every legal race+STR build (DoD-assertable).
+- ✅ **Abstract integer weight units, not realistic mass.** Items carry small whole-number weights by gameplay bulk. Normal range ~1–15, ceilinged at heavy armor. Illustrative anchors (final values = systems pass): book/knife 1, dagger 2, cutlass ~5, maul / heavy armor at the top.
+- ✅ **Light/bundled tier:** small items weigh at the stack level — `ceil(count / bundle_size)`, `bundle_size` per-item data (arrows 20-to-a-unit, a heavier variant 10, etc.). Currency is just a bundled light item, so the model is currency-agnostic — **currency design itself parked.**
+- ✅ **Oversized objects (crates, barrels) sit outside personal inventory** — world containers / set dressing. A dedicated hauling interaction, if ever, is a separate later feature, not a widening of the weight scale.
+- ✅ **Single hard cap for V1** (over capacity → can't add). The two-tier "encumbered penalty" model is deferred with combat: its bite is slowed movement (MC), which is combat-deferred — a consequence with no consumer yet.
+- ✅ **Wreck supplies** complete §5.3's already-specced "gear" reward: baseline supplies unconditional, success/thoroughness adds more — a check *scales a reward, never gates a necessity*. (Beat-detailing → consequences chat.)
+- ✅ **DoD check:** every item has a non-negative integer weight in band; stackables carry a `bundle_size`; the capacity floor invariant holds for all legal builds.
+- ✅ **Build (V1 prompt):** capacity function + tests, items-as-data, and the inventory/sheet UI are V1 build work.
 
 ## 8. Explicit Non-Goals (MVP)
 Full species roster · subclasses · free exploration of the opening area · explorable town hub · multiple chapters · romance/relationship systems · combat depth (pending 7.3).
