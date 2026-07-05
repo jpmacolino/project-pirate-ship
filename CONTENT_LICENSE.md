@@ -1,0 +1,1 @@
+The source code in this repository is licensed under the MIT License (see LICENSE). All creative content, including the world of Evorath, its characters, names, lore, narrative, dialogue, and artwork, is © Free Dragon Press LLC. All rights reserved. The code license does not grant any right to use the setting, story, or characters.
